@@ -6,17 +6,29 @@ import ListItem from './screen/ListItem'
 import { color } from '../assets/misc/colors'
 import { AntDesign } from '@expo/vector-icons';
 import { fontSize } from '../assets/misc/others';
+import Register from './screen/Register'
+import Login from './screen/Login'
+import { useSelector } from 'react-redux'
+import { selectCurrentToken } from './services/features/userSlice'
+import { NavigationProp, useNavigation } from '@react-navigation/native'
 
 
 const Tab = createBottomTabNavigator()
 
 const BottomTabNavigator: React.FC = () => {
+    const navigator = useNavigation<NavigationProp<any>>()
+
+    const token = useSelector(selectCurrentToken)
+    if (!token ) {
+        navigator.navigate('Login')
+    }
+
     return (
         <Tab.Navigator screenOptions={{
             headerStyle: styles.header,
             headerTitleStyle: styles.headerTitle,
             headerTitleAlign: 'center',
-
+            headerShown: true,
             tabBarBackground: () => <View
                 style={{
                     backgroundColor: color.NEW_BACKGROUND_COLOR,
@@ -36,6 +48,7 @@ const BottomTabNavigator: React.FC = () => {
                     name='Home'
                     component={HomeScreen}
                     options={{
+                        headerShown: false,
                         tabBarIcon: ({ focused }) => (
                             <AntDesign name="home" size={24} color={focused ? "purple" : "black"} />
                         )

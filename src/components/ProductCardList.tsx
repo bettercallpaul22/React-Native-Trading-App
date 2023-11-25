@@ -1,27 +1,41 @@
-import { ActivityIndicator, Dimensions, Image, StatusBar, StyleSheet, Text, View } from 'react-native'
-import React, { useRef } from 'react'
+import {
+    ActivityIndicator,
+    Dimensions, Image,
+    TouchableOpacity, StyleSheet,
+    Text, View,
+    ScrollView,
+    RefreshControl
+} from 'react-native'
+import React, { useCallback, useRef, useState } from 'react'
 import Animated, { interpolate } from 'react-native-reanimated'
 import { color } from '../../assets/misc/colors'
 import { fontSize } from '../../assets/misc/others'
-import CustoButton from './CustoButton'
-import { useGet_all_productsQuery } from '../services/api/productApiSlice'
+import { useGet_all_productsQuery, useLazyGet_all_productsQuery } from '../services/api/productApiSlice'
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 const { height, width } = Dimensions.get('window')
 const SPACING = 20
 const CARD_HEIGHT = 150
-const image_condition = [
-    { New: '../../assets/images/new.png' },
-    // {New with Tag: '../../assets/images/new-tag.jpg'},
-    { Used: '../../assets/images/used.jpg' },
-]
-
+import { Entypo } from '@expo/vector-icons';
+import { useDispatch } from 'react-redux'
 
 
 const ProductCardList = () => {
+    const [refreshing, setRefreshing] = useState(false);
+    const dispatch = useDispatch()
     const navigator = useNavigation<NavigationProp<any>>()
     const scrollY = React.useRef(new Animated.Value(0)).current;
-    const { isLoading, data: product_data, isError } = useGet_all_productsQuery()
+    const { isLoading, data: product_data, isError, error } = useGet_all_productsQuery()
+    const [fetch_products, { isLoading: lasyLoading }] = useLazyGet_all_productsQuery()
+    const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
 
+
+    const onRefresh = useCallback(() => {
+        setRefreshing(lasyLoading);
+        fetch_products()
+        setTimeout(() => {
+            setRefreshing(lasyLoading);
+        }, 5000);
+    }, []);
     // console.log("all products", product_data?.map((product) => product.product_condition))
     if (isLoading) return <View
         style={{
@@ -31,24 +45,23 @@ const ProductCardList = () => {
 
         }}
     >
-        <ActivityIndicator size="large" />
+        <ActivityIndicator size="large" color={"purple"} />
     </View>
 
-    if (isError) return <View
-        style={{
-            flex: 1,
-            alignItems: 'center',
-            justifyContent: 'center'
-
-        }}
+    if (isError) return <ScrollView
+        style={{ flex: 1, }}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
     >
-        <Text>Something went wrong please retry</Text>
-    </View>
-
-
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Text>Something went wrong please pull down to refresh</Text>
+        </View>
+    </ScrollView>
+// console.log("product", product_data.map((product)=>product.images.map((img)=>img['image'])))
     return (
         <View style={{ backgroundColor: color.NEW_BACKGROUND_COLOR, }}>
+
             <Animated.FlatList
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                 onScroll={Animated.event(
                     [{ nativeEvent: { contentOffset: { y: scrollY } } }],
                     { useNativeDriver: true },
@@ -77,49 +90,64 @@ const ProductCardList = () => {
                         outputRange: [1, 1, 1, -20]
                     })
 
-                    return <Animated.View style={[styles.item_card, { transform: [{ scale, }], }]}>
+                    return <AnimatedTouchable
+                        style={[styles.item_card, { transform: [{ scale, }], }]}
+                        onPress={() => {
+                            navigator.navigate('ProductDetails2', { data: item, images: item.images })
+                        }}
+                    >
+                        {item.product_condition === "Fairy Used" && <Text
+                            style={{ fontWeight: '600', color: 'gray', position: 'absolute', right: 20 }}
+                        >{item.product_condition}</Text>}
+
+                        {item.product_condition === "New With Tag" && <Text
+                            style={{ fontWeight: '600', color: 'gray', position: 'absolute', right: 20 }}
+                        >{item.product_condition}</Text>}
+
+                        {item.product_condition === "New" && <Text
+                            style={{ fontWeight: '600', color: 'gray', position: 'absolute', right: 20 }}
+                        >{item.product_condition}</Text>}
                         <View style={styles.image_container}>
-                            {/* {item.product_condition.toLowerCase() === "new" && (<Image
-                                resizeMode='cover'
-                                style={{ height: 40, width: 40, position: 'absolute', right: 0 }}
-                                source={require('../../assets/images/new.png')}
-                            />)}
-
-                            {item.product_condition.toLowerCase() === "new with tag" && (<Image
-                                resizeMode='cover'
-                                style={{ height: 40, width: 40, position: 'absolute', right: 0 }}
-                                source={require('../../assets/images/new-tag.jpg')}
-                            />)} */}
-
-                            {item.product_condition === "Fairy Used" && <Text
-                                style={{ fontWeight: '600', color: 'gray', position: 'absolute', right: 0 }}
-                            >{item.product_condition}</Text>}
-
-                            {item.product_condition === "New With Tag" && <Text
-                                style={{ fontWeight: '600', color: 'gray', position: 'absolute', right: 0 }}
-                            >{item.product_condition}</Text>}
-                            
-                            {item.product_condition === "New" && <Text
-                                style={{ fontWeight: '600', color: 'gray', position: 'absolute', right: 0 }}
-                            >{item.product_condition}</Text>}
 
                             <Image
                                 resizeMode='contain'
                                 style={styles.image}
+                                // source={require('../../assets/images/Egypt.png')}
                                 source={{ uri: item.images[0]['image'] }}
                             />
-
-                            <View style={{ padding: 10 }}>
-                                <Text style={styles.item_name}>{item.product_name}</Text>
-                                <Text style={styles.item_desc}>{item.product_desc}</Text>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                                    <Text style={{ fontSize: fontSize.lg, fontWeight: '500' }}>value</Text>
-                                    <Text style={styles.item_name}> ₦{item.product_price}</Text>
-                                </View>
-
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <Entypo name="location-pin" size={22} color="black" />
+                                <Text style={{ fontWeight: '600', color: 'gray' }}>lagos Ng</Text>
                             </View>
                         </View>
-                        <CustoButton
+
+                        <View style={{ flex: 2, paddingTop: 15 }}>
+                            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', }}>
+                                <Text style={{ fontSize: fontSize.xm, fontWeight: '500' }}>Product name</Text>
+                                <Text style={styles.item_name}>{item.product_name}</Text>
+                            </View>
+
+                            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', }}>
+                                <Text style={{ fontSize: fontSize.xm, fontWeight: '500' }}>Product value</Text>
+                                <Text style={styles.item_name}> ₦{item.product_price}</Text>
+                            </View>
+
+                            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', }}>
+                                <Text style={{ fontSize: fontSize.xm, fontWeight: '500' }}>Owner</Text>
+                                <Text style={styles.item_name}>Obaro Paul</Text>
+                            </View>
+
+                            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', }}>
+                                <Text style={{ fontSize: fontSize.xm, fontWeight: '500' }}>Deal Type</Text>
+                                <Text style={styles.item_name}>{item.deal_type}</Text>
+                            </View>
+                            <Text style={styles.item_desc}>
+                                ipsum is a placeholder text commonly used to
+                                or a typeface without relying on meaningful content. Lor
+                            </Text>
+                        </View>
+
+                        {/* <CustoButton
                             color={'purple'}
                             title={
                                 item.deal_type === 'Cash Sale' ?  // go remove the spacing
@@ -136,8 +164,9 @@ const ProductCardList = () => {
                             onPress={() => {
                                 navigator.navigate('ProductView', {data:item, images:item.images})
                             }}
-                        />
-                    </Animated.View>
+                        /> */}
+                    </AnimatedTouchable>
+
                 }}
             />
         </View>
@@ -159,22 +188,24 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         shadowOpacity: 2,
         shadowRadius: 20,
-        justifyContent: 'flex-start'
+        // justifyContent: 'flex-start'
+        flexDirection: 'row',
+        gap: 10
     },
     image_container: {
-        // height: 90,
-        // width: 90,
+        height: '100%',
+        // width: 120,
+        flex: 1,
         // backgroundColor: 'yellow',
-        flexDirection: 'row'
 
     },
     image: {
-        height: 90,
-        width: 90,
-
+        height: 120,
+        width: '100%',
+        marginBottom: -15
     },
     item_name: {
-        fontSize: fontSize.lg,
+        fontSize: fontSize.xm,
         fontWeight: '600'
 
     },

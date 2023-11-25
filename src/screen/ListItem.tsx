@@ -117,7 +117,6 @@ const ListItem = () => {
                 values.item_desc = ''
                 setimageArr([])
                 setModalVisible(true)
-                console.log(res)
             }
         }
         catch (error) {
@@ -239,7 +238,6 @@ const ListItem = () => {
                                                 source={{ uri: image }}
                                             />
                                             <TouchableOpacity onPress={() => {
-                                                console.log("id", _id)
                                                 deleteImg(_id)
 
                                             }}>

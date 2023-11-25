@@ -1,55 +1,24 @@
 import * as React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Register from './src/screen/Register';
-import ProductView from './src/screen/ProductView';
-import HomeTabs from './src/screen/HomeTabs';
+import ProductDetails from './src/screen/ProductDetails';
+import ProductDetails2 from './src/screen/ProductDetails2';
 import { Provider } from 'react-redux';
-import { store } from './src/services/store';
+import {  persistor, store } from './src/services/store';
 import { PaperProvider } from 'react-native-paper';
-import { AntDesign, Entypo } from '@expo/vector-icons';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import AnimatedTabBar, { TabsConfig, BubbleTabBarItemConfig } from '@gorhom/animated-tabbar';
 import { color } from './assets/misc/colors';
+import { AuthService } from './src/services/authServices';
 
-// const Tab = createMaterialBottomTabNavigator();
+import { selectCurrentToken, selectCurrentUser, setCredientials } from './src/services/features/userSlice';
+import { PersistGate } from 'redux-persist/integration/react';
+import { AnyAction } from '@reduxjs/toolkit';
+import Login from './src/screen/Login';
+import ButtomTabs from './src/BottomTabNavigator'
+
 
 const Stack = createNativeStackNavigator();
-const Tab = createBottomTabNavigator();
-
-const tabs: TabsConfig<BubbleTabBarItemConfig> = {
-  Home: {
-    labelStyle: {
-      color: '#5B37B7',
-    },
-    icon: {
-      component: () => <AntDesign name="stepforward" size={24} color="black" />,
-      activeColor: 'rgba(91,55,183,1)',
-      inactiveColor: 'rgba(0,0,0,1)',
-    },
-    background: {
-      activeColor: 'rgba(223,215,243,1)',
-      inactiveColor: 'rgba(223,215,243,0)',
-    },
-  },
-
-
-  Login: {
-    labelStyle: {
-      color: '#1194AA',
-    },
-    icon: {
-      component: () => <AntDesign name="stepforward" size={24} color="black" />,
-      activeColor: 'rgba(17,148,170,1)',
-      inactiveColor: 'rgba(0,0,0,1)',
-    },
-    background: {
-      activeColor: 'rgba(207,235,239,1)',
-      inactiveColor: 'rgba(207,235,239,0)',
-    },
-  },
-};
 
 
 
@@ -58,29 +27,44 @@ const tabs: TabsConfig<BubbleTabBarItemConfig> = {
 
 
 
+const App = () => {
+  const authService = new AuthService()
+  const [token, settoken] = React.useState('')
+  
+  const get_token = async()=>{
+    const token = await authService.getUserToken() as string
+    if(token !== null){
+      settoken(token)
+    }
+  }
+  React.useEffect(()=>{
+    // get_token()
+  },[])
 
-function App() {
+
 
 
   return (
-    <Provider store={store}>
-      <PaperProvider>
-        <NavigationContainer>
+    <PaperProvider>
+      <NavigationContainer>
+        <Provider store={store}>
+        <PersistGate loading={<Text>Loading...</Text>} persistor={persistor}>
           <Stack.Navigator screenOptions={{
             headerStyle: styles.header,
             headerTitleStyle: styles.headerTitle,
-            headerTitleAlign: 'center'
-
-          }}
-        
-          >
-            <Stack.Screen name='HomeTabs' component={HomeTabs} options={{ headerShown: false }} />
-            <Stack.Screen name='ProductView' component={ProductView}/>
-            <Stack.Screen name='Register' component={Register} />
+            headerTitleAlign: 'center',
+            headerShown:false,
+          }}>
+           <Stack.Screen name='ButtomTabs' component={ButtomTabs} options={{ headerShown: false }} />
+            <Stack.Screen name='Register' component={Register} options={{ headerShown: true }}/>
+            <Stack.Screen name='Login' component={Login} options={{ headerShown: true }}/>
+            <Stack.Screen name='ProductDetails' component={ProductDetails} options={{ headerShown: true }} />
+            <Stack.Screen name='ProductDetails2' component={ProductDetails2} options={{ headerShown: true }} />
           </Stack.Navigator>
-        </NavigationContainer>
-      </PaperProvider>
-    </Provider>
+          </PersistGate>
+        </Provider>
+      </NavigationContainer>
+    </PaperProvider>
   );
 }
 

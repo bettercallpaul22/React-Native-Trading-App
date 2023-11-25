@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { User } from "../../model";
+// import { User } from "../../model";
 import {AuthService} from "../../services/authServices";
 import { RooState } from "../store";
 

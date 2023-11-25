@@ -12,7 +12,7 @@ interface Enviroment {
 }
 
 const enviroment: Enviroment = {
-    android: 'http://192.168.17.251:5000',
+    android: 'http://192.168.206.251:5000',
     web: 'http://localhost:5000',
 }
 

@@ -23,4 +23,4 @@ export const userApiSlice = apiSlice.injectEndpoints({
 }) 
 
 
-export const {useGet_all_productsQuery, useCreate_productMutation} = userApiSlice
+export const {useGet_all_productsQuery, useCreate_productMutation, useLazyGet_all_productsQuery} = userApiSlice

@@ -4,98 +4,134 @@ import {
     TextInput,
     ScrollView,
     StyleSheet,
-    Image,
-    TouchableOpacity
+    TouchableOpacity,
+    Button,
 } from "react-native";
 import Animated, {
-    Easing, useAnimatedStyle,
+    Easing,
     useSharedValue,
-    withTiming,
     FadeInUp
 }
     from "react-native-reanimated";
-import { AuthResponse, LoginValues } from "../../model";
+import { AuthResponse } from "../../model";
 import { fontSize } from "../../assets/misc/others";
 import { color } from "../../assets/misc/colors";
-import { Formik } from "formik";
+import { Formik, FormikErrors } from "formik";
 import { login_schema } from "../utilities/schema";
-import { useLoginMutation } from "../services/api/authApiSlice";
+import { useLoginMutation, useRegisterMutation } from "../services/api/authApiSlice";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { useState } from 'react'
 import CustoButton from "../components/CustoButton";
-import { Header } from "../components/Header";
+import { useDispatch, useSelector } from "react-redux";
+import { selectCurrentToken, selectCurrentUser, setCredientials } from "../services/features/userSlice";
+import { AuthService } from "../services/authServices";
 
+interface InputType {
+    email: string;
+    password: string;
+}
+
+interface LocationResponse {
+    address: {
+        city: string;
+        county: string;
+        road: string;
+        postcode: string;
+        state: string;
+        country: string;
+        country_code: string;
+    }
+}
+
+interface LocRes {
+    data: LocationResponse
+}
 
 
 
 const Login: React.FC = () => {
+    const token = useSelector(selectCurrentToken) as string
+    const authService = new AuthService()
+    const dispatch = useDispatch()
     const navigator = useNavigation<NavigationProp<any>>()
-    const [login, { isLoading }] = useLoginMutation()
-    const initialValues: LoginValues = { email: '', password: '', };
-    const random_width = useSharedValue(40)
+    const [login_user, { isLoading }] = useLoginMutation()
     const [emailErr, setEmailErr] = useState('')
     const [passwordErr, setPasswordErr] = useState('')
     const [serverErr, setServerErr] = useState('')
-
-    const config = {
-        duration: 200,
-        easing: Easing.bezier(0.5, 0.01, 0.1, 0.05)
-    }
-    const style = useAnimatedStyle(() => {
-        return {
-            width: withTiming(random_width.value, config)
-        }
-    })
+    const [errorMsg, setErrorMsg] = useState(null);
 
 
 
-    const handle_login = async (value: LoginValues) => {
+
+
+
+    const handle_login = async (value: InputType, errors: FormikErrors<InputType>) => {
+        if (errors.email || errors.password) return
         try {
-            const res: AuthResponse = await login(value).unwrap()
-            console.log("res", res.success)
+            const res: AuthResponse = await login_user(value).unwrap()
+            if (res.success) {
+                dispatch(setCredientials(res))
+                authService.setUser(res.user)
+                authService.setUserToken(res.token)
+                authService.setUserId(res._id)
+                navigator.navigate('ButtomTabs')
+            }
+            // console.log("res", res)
         } catch (error) {
-            setServerErr(error.data)
+            if (error.data === "Email doesn't exist" && error.status === 404) {
+                setEmailErr(error.data)
+            } else if (error.data === "Password is incorrect" && error.status === 401) {
+                setPasswordErr(error.data)
+            } else {
+                setServerErr(error.data)
+            }
+
+
 
         }
     }
 
-
+    if (token) {
+        navigator.navigate('HomeTabs')
+    }
+   
     return (
         <Formik
-            initialValues={initialValues}
+            initialValues={{ email: '', password: '', }}
             validationSchema={login_schema}
             onSubmit={(values, actions) => {
             }}
         >
             {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
                 <ScrollView style={[styles.main,]}>
-                    {/* <Header title="Login" /> */}
                     <View style={styles.image_light_container}>
                         <Animated.Image
                             entering={FadeInUp.delay(200).duration(1000).springify().damping(3)}
-                            style={{ height: 200, width: 150, }} source={require('../../assets/lamp.png')}
+                            style={{ height: 160, width: 120, }} source={require('../../assets/lamp.png')}
                         />
                         <Animated.Image
                             entering={FadeInUp.delay(300).duration(1000).springify().damping(3)}
 
-                            style={{ height: 160, width: 150, }}
+                            style={{ height: 120, width: 100, }}
                             source={require('../../assets/lamp.png')}
                         />
                     </View>
 
-                    <View style={{ alignItems: 'center', marginTop: 50 }}>
+                    <View style={{ alignItems: 'center', marginBottom: 20, marginTop: 80 }}>
                         <Text style={{ fontWeight: '600', fontSize: fontSize.xxl }}>LOGIN</Text>
                     </View>
 
                     <View style={styles.input_btn_wrapper}>
+
                         <View style={errors.email && touched.email ? styles.input_wrapper_error : styles.input_wrapper}>
                             <TextInput
                                 style={styles.input}
-                                placeholder="Enter email address"
+                                placeholder="Email"
                                 onChangeText={handleChange('email')}
                                 onBlur={() => {
                                     handleBlur('email')
                                     setEmailErr('')
+                                    setPasswordErr('')
                                     setServerErr('')
 
                                 }}
@@ -110,12 +146,14 @@ const Login: React.FC = () => {
                         <View style={errors.password && touched.password ? styles.input_wrapper_error : styles.input_wrapper}>
                             <TextInput
                                 style={styles.input}
-                                placeholder="Enter Password"
+                                placeholder="Password"
                                 onChangeText={handleChange('password')}
                                 onBlur={() => {
-                                    setPasswordErr('')
                                     handleBlur('password')
+                                    setEmailErr('')
+                                    setPasswordErr('')
                                     setServerErr('')
+
                                 }}
                                 value={values.password}
                                 inputMode="text"
@@ -124,20 +162,18 @@ const Login: React.FC = () => {
                             {passwordErr ? <Text style={styles.error_text}>{passwordErr}</Text> : ''}
 
                         </View>
+
+
+
                         {serverErr ? <Text style={styles.error_text}>{serverErr}</Text> : ''}
 
                         <View style={styles.btn_wrapper} >
                             <CustoButton
-                                title={isLoading ? 'Submitting...' : 'Login'}
+                                // disabled={!values.firstName || !values.lastName || !values.email || !values.password || !values.comfirmPassword}
+                                title={isLoading ? 'Submitting...' : 'login'}
                                 onPress={() => {
                                     handleSubmit()
-                                    if (
-                                        errors.email
-                                        || errors.password
-                                        || values.email.length < 1
-                                        || values.password.length < 1) return
-                                    handle_login(values)
-
+                                    handle_login(values, errors)
                                 }}
                                 color="purple"
                             />
@@ -145,7 +181,7 @@ const Login: React.FC = () => {
 
                         <View style={{ flexDirection: 'row', gap: 30, }}>
                             <Text style={{ fontSize: 16, fontWeight: '600' }}>
-                                Don't have an account ?
+                                Dont't have an account ?
                             </Text>
                             <TouchableOpacity onPress={() => navigator.navigate("Register")}>
                                 <Text style={{ fontSize: 16, fontWeight: '600', textDecorationLine: 'underline' }}>
@@ -156,6 +192,7 @@ const Login: React.FC = () => {
                         </View>
 
                     </View>
+            
                 </ScrollView>
             )}
         </Formik>
@@ -169,19 +206,27 @@ export default Login
 const styles = StyleSheet.create({
     main: {
         flex: 1,
-        backgroundColor: color.NEW_BACKGROUND_COLOR
+        backgroundColor: color.NEW_BACKGROUND_COLOR,
+        paddingHorizontal: 20
     },
     image_bg: {
         height: '100%',
         width: '100%',
         position: 'absolute'
     },
+
     image_light_container: {
-        flexDirection: 'row', width: '100%', justifyContent: 'space-around',
+        flexDirection: 'row',
+        width: '100%',
+        justifyContent: 'space-around',
     },
+
     input_btn_wrapper: {
-        alignItems: 'center', marginTop: 50, paddingHorizontal: 20
+        alignItems: 'center',
+        //   paddingHorizontal: 20,
+        //   backgroundColor:'teal'
     },
+
     input_wrapper: {
         borderWidth: 1,
         borderColor: color.BORDER_COLOR,

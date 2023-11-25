@@ -3,7 +3,7 @@ import React from 'react'
 
 interface ButtonProps {
     title: string;
-    color: string;
+    color?: string;
     disabled?: boolean;
     onPress:()=>void;
 }
@@ -13,7 +13,7 @@ const CustoButton: React.FC<ButtonProps> = ({ title, color, onPress, disabled })
         <View style={{ width: '100%', justifyContent: 'center' }}>
             <Button
                 title={title}
-                color={color}
+                color={'purple'}
                 onPress={onPress}
                 disabled={disabled}
                 

@@ -1,5 +1,5 @@
 import { Dimensions, Image, StyleSheet, Text, View, StatusBar } from 'react-native'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { color } from '../../assets/misc/colors';
 import Animated from 'react-native-reanimated';
 import { fontSize } from '../../assets/misc/others';
@@ -7,6 +7,7 @@ import Slider from '@react-native-community/slider';
 import CustoButton from '../components/CustoButton';
 import { useRoute } from "@react-navigation/native";
 import { Product } from '../../model';
+import { Header } from '../components/Header';
 
 
 
@@ -17,18 +18,24 @@ const ITEM_WIDTH = width * 0.82;
 const ITEM_HEIGHT = ITEM_WIDTH * 1.1;
 
 
-const ProductView: React.FC = () => {
+const ProductDetails: React.FC = () => {
   const { params } = useRoute()
   const product: Product = params['data']
   const { images } = params['data']
   const [offeredPrice, setofferedPrice] = useState(0)
+
   const scrollX = React.useRef(new Animated.Value(0)).current;
   const percentage = (offeredPrice / 3800) * 100
+
+  
+
 
   const img: {
     _id: number;
     image: string;
   }[] = images
+
+
 
   return (
     <View style={styles.container}>
@@ -149,7 +156,7 @@ const ProductView: React.FC = () => {
   )
 }
 
-export default ProductView
+export default ProductDetails
 
 const styles = StyleSheet.create({
   container: {
