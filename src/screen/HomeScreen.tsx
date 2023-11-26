@@ -1,6 +1,6 @@
 import {
     Alert, BackHandler, Button, Dimensions, DrawerLayoutAndroid, Image, Pressable, SafeAreaView,
-    StatusBar, StyleSheet, Text, TouchableOpacity, View,
+    StatusBar, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedbackComponent, View,
 } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { Header } from '../components/Header'
@@ -38,7 +38,6 @@ const HomeScreen = () => {
         }, []),
     );
 
-    const drawer = useRef<DrawerLayoutAndroid>(null);
     const [drawerPosition, setDrawerPosition] = useState<'left' | 'right'>(
         'right',
     );
@@ -50,26 +49,9 @@ const HomeScreen = () => {
         }
     };
 
-    const navigationView = () => (
-        <View style={[styles.container2, styles.navigationContainer]}>
-            {/* <Text style={styles.paragraph}>I'm in the Drawer!</Text> */}
-            <Button
-                title="Close drawer"
-                onPress={() => drawer.current?.closeDrawer()}
-            />
-        </View>
-    );
-
+  
 
     const styleX = useSharedValue(-width)
-    // const styleX = new Animated.Value(0)
-
-
-
-    // const translatex = styleX.interpolate({
-    //     inputRange:[0, 0.5,  1],
-    //     outputRange:[-300, -slider_width / 2 , 0],
-    // })
 
     const xt = useAnimatedStyle(() => {
         return {
@@ -91,15 +73,23 @@ const HomeScreen = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <AnimatedTouchable
-                style={[styles.container2, xt]}
-                onPress={() => {styleX.value = -width}}
-            >
+            <AnimatedTouchable style={[styles.container2, xt]}  activeOpacity={1}>
                 <View
-                style={{height, width:300, backgroundColor:color.NEW_BACKGROUND_COLOR, zIndex:500}}
+                    style={{
+                        height, width: slider_width, backgroundColor: color.NEW_BACKGROUND_COLOR,
+                        zIndex: 500, position: 'absolute', left: 0
+                    }}
+              />
+                <TouchableOpacity
+                activeOpacity={1}
+                    onPress={() => { styleX.value = -width }}
+                    style={{
+                        height, width: 100, backgroundColor: 'teal',
+                        zIndex: 500, position: 'absolute', right: 0
+                    }}
                 >
 
-                </View>
+                </TouchableOpacity>
             </AnimatedTouchable >
             <View style={[styles.header,]}>
                 <View style={{ height: 50, width: 50 }}></View>

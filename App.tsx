@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { StyleSheet, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Register from './src/screen/Register';
 import ProductDetails from './src/screen/ProductDetails';
 import ProductDetails2 from './src/screen/ProductDetails2';
 import { Provider } from 'react-redux';
-import {  persistor, store } from './src/services/store';
+import { persistor, store } from './src/services/store';
 import { PaperProvider } from 'react-native-paper';
 import { color } from './assets/misc/colors';
 import { AuthService } from './src/services/authServices';
@@ -15,10 +16,20 @@ import { selectCurrentToken, selectCurrentUser, setCredientials } from './src/se
 import { PersistGate } from 'redux-persist/integration/react';
 import { AnyAction } from '@reduxjs/toolkit';
 import Login from './src/screen/Login';
+import CustomDrawer from './src/screen/CustomDrawer';
 import ButtomTabs from './src/BottomTabNavigator'
 
 
 const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator()
+
+const DrawerNavigator = () => {
+  return <Drawer.Navigator drawerContent={(props:any)=>(<CustomDrawer {...props}/>)}>
+    <Drawer.Screen options={{ headerShown: true }}  name='ButtomTabs' component={ButtomTabs} />
+    <Drawer.Screen name='Login' component={Login} />
+  </Drawer.Navigator>
+
+}
 
 
 
@@ -30,41 +41,64 @@ const Stack = createNativeStackNavigator();
 const App = () => {
   const authService = new AuthService()
   const [token, settoken] = React.useState('')
-  
-  const get_token = async()=>{
+
+  const get_token = async () => {
     const token = await authService.getUserToken() as string
-    if(token !== null){
+    if (token !== null) {
       settoken(token)
     }
   }
-  React.useEffect(()=>{
+  React.useEffect(() => {
     // get_token()
-  },[])
-
+  }, [])
 
 
 
   return (
-    <PaperProvider>
-      <NavigationContainer>
-        <Provider store={store}>
-        <PersistGate loading={<Text>Loading...</Text>} persistor={persistor}>
-          <Stack.Navigator screenOptions={{
-            headerStyle: styles.header,
-            headerTitleStyle: styles.headerTitle,
-            headerTitleAlign: 'center',
-            headerShown:false,
-          }}>
-           <Stack.Screen name='ButtomTabs' component={ButtomTabs} options={{ headerShown: false }} />
-            <Stack.Screen name='Register' component={Register} options={{ headerShown: true }}/>
-            <Stack.Screen name='Login' component={Login} options={{ headerShown: true }}/>
-            <Stack.Screen name='ProductDetails' component={ProductDetails} options={{ headerShown: true }} />
-            <Stack.Screen name='ProductDetails2' component={ProductDetails2} options={{ headerShown: true }} />
+    <Provider store={store}>
+      <PersistGate loading={<Text>Loading...</Text>} persistor={persistor}>
+        {/* <NavigationContainer>
+          <DrawerNavigator />
+        </NavigationContainer> */}
+
+        <NavigationContainer>
+        <Stack.Navigator  screenOptions={{
+              headerStyle: styles.header,
+              headerTitleStyle: styles.headerTitle,
+              headerTitleAlign: 'center',
+              headerShown: false,
+            }}>
+            {/* <Stack.Screen name='ButtomTabs' component={ButtomTabs} options={{ headerShown: false }} /> */}
+            <Stack.Screen name='DrawerNavigator' component={DrawerNavigator}  />
+            <Stack.Screen name='Login' component={Login} />
+
+
           </Stack.Navigator>
-          </PersistGate>
-        </Provider>
-      </NavigationContainer>
-    </PaperProvider>
+        </NavigationContainer>
+      </PersistGate>
+    </Provider>
+
+    // <PaperProvider>
+    //   <NavigationContainer>
+    //     <Provider store={store}>
+    //       <PersistGate loading={<Text>Loading...</Text>} persistor={persistor}>
+    //         <DrawerNavigator />
+    //         <Stack.Navigator screenOptions={{
+    //           headerStyle: styles.header,
+    //           headerTitleStyle: styles.headerTitle,
+    //           headerTitleAlign: 'center',
+    //           headerShown: false,
+    //         }}>
+    //           <Stack.Screen name='ButtomTabs' component={ButtomTabs} options={{ headerShown: false }} />
+    //           <Stack.Screen name='Register' component={Register} options={{ headerShown: true }} />
+    //           <Stack.Screen name='Login' component={Login} options={{ headerShown: true }} />
+    //           <Stack.Screen name='ProductDetails' component={ProductDetails} options={{ headerShown: true }} />
+    //           <Stack.Screen name='ProductDetails2' component={ProductDetails2} options={{ headerShown: true }} />
+    //         </Stack.Navigator>
+    //       </PersistGate>
+    //     </Provider>
+    //   </NavigationContainer>
+    // </PaperProvider>
   );
 }
 
