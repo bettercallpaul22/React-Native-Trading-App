@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { StyleSheet, Text } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { StyleSheet, View, Text } from 'react-native';
+import { NavigationContainer, } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Register from './src/screen/Register';
-import ProductDetails from './src/screen/ProductDetails';
+import Profile from './src/screen/Profile';
 import ProductDetails2 from './src/screen/ProductDetails2';
 import { Provider } from 'react-redux';
 import { persistor, store } from './src/services/store';
@@ -12,102 +12,106 @@ import { PaperProvider } from 'react-native-paper';
 import { color } from './assets/misc/colors';
 import { AuthService } from './src/services/authServices';
 
-import { selectCurrentToken, selectCurrentUser, setCredientials } from './src/services/features/userSlice';
 import { PersistGate } from 'redux-persist/integration/react';
-import { AnyAction } from '@reduxjs/toolkit';
 import Login from './src/screen/Login';
 import CustomDrawer from './src/screen/CustomDrawer';
 import ButtomTabs from './src/BottomTabNavigator'
+import { User } from './model';
+import { fontSize } from './assets/misc/others';
 
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator()
 
 const DrawerNavigator = () => {
-  return <Drawer.Navigator drawerContent={(props:any)=>(<CustomDrawer {...props}/>)}>
-    <Drawer.Screen options={{ headerShown: true }}  name='ButtomTabs' component={ButtomTabs} />
-    <Drawer.Screen name='Login' component={Login} />
+  return <Drawer.Navigator drawerContent={(props: any) => (<CustomDrawer {...props} />)}
+    screenOptions={{
+      headerStyle: styles.header,
+      headerTitleStyle: styles.headerTitle,
+      headerTitleAlign: 'center',
+      headerShown: false,
+      drawerActiveTintColor: 'purple',
+
+    }}
+
+  >
+    <Drawer.Screen options={{ headerShown: false }} name='ButtomTabs' component={ButtomTabs} />
+    <Drawer.Screen options={{ headerShown: false }} name='Profile' component={Profile} />
   </Drawer.Navigator>
 
 }
 
 
-
-
-
-
-
-
 const App = () => {
   const authService = new AuthService()
+  const [user, setuser] = React.useState({})
+  React.useLayoutEffect(() => {
+    authService.getUser()
+      .then(res => console.log(setuser(user)))
+      .catch(err => console.log('err', err))
+
+  }, [])
+
   const [token, settoken] = React.useState('')
 
   const get_token = async () => {
     const token = await authService.getUserToken() as string
+    const user = await authService.getUser() as User
     if (token !== null) {
       settoken(token)
+      setuser(user)
     }
   }
   React.useEffect(() => {
-    // get_token()
+    get_token()
   }, [])
 
+  // console.log("user", user)
 
 
   return (
-    <Provider store={store}>
-      <PersistGate loading={<Text>Loading...</Text>} persistor={persistor}>
-        {/* <NavigationContainer>
-          <DrawerNavigator />
-        </NavigationContainer> */}
+    <PaperProvider>
 
-        <NavigationContainer>
-        <Stack.Navigator  screenOptions={{
+      <Provider store={store}>
+        <PersistGate
+          loading={
+            <View
+              style={{
+                flex: 1,
+                backgroundColor: color.NEW_BACKGROUND_COLOR,
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              <Text style={{ fontWeight: '600', fontSize: fontSize.lg }}>Loading...</Text>
+            </View>
+          }
+          persistor={persistor}
+        >
+          <NavigationContainer>
+            <Stack.Navigator screenOptions={{
               headerStyle: styles.header,
               headerTitleStyle: styles.headerTitle,
               headerTitleAlign: 'center',
               headerShown: false,
             }}>
-            {/* <Stack.Screen name='ButtomTabs' component={ButtomTabs} options={{ headerShown: false }} /> */}
-            <Stack.Screen name='DrawerNavigator' component={DrawerNavigator}  />
-            <Stack.Screen name='Login' component={Login} />
+              <Stack.Screen name='DrawerNavigator' component={DrawerNavigator} />
+              {/* <Stack.Screen name='ButtomTabs' component={ButtomTabs} options={{ headerShown: false }} /> */}
+              <Stack.Screen name='Register' component={Register} options={{ headerShown: true }} />
+              <Stack.Screen name='Login' component={Login} options={{ headerShown: true, headerBackVisible: false }} />
+              <Stack.Screen name='ProductDetails2' component={ProductDetails2} options={{ headerShown: true }} />
 
-
-          </Stack.Navigator>
-        </NavigationContainer>
-      </PersistGate>
-    </Provider>
-
-    // <PaperProvider>
-    //   <NavigationContainer>
-    //     <Provider store={store}>
-    //       <PersistGate loading={<Text>Loading...</Text>} persistor={persistor}>
-    //         <DrawerNavigator />
-    //         <Stack.Navigator screenOptions={{
-    //           headerStyle: styles.header,
-    //           headerTitleStyle: styles.headerTitle,
-    //           headerTitleAlign: 'center',
-    //           headerShown: false,
-    //         }}>
-    //           <Stack.Screen name='ButtomTabs' component={ButtomTabs} options={{ headerShown: false }} />
-    //           <Stack.Screen name='Register' component={Register} options={{ headerShown: true }} />
-    //           <Stack.Screen name='Login' component={Login} options={{ headerShown: true }} />
-    //           <Stack.Screen name='ProductDetails' component={ProductDetails} options={{ headerShown: true }} />
-    //           <Stack.Screen name='ProductDetails2' component={ProductDetails2} options={{ headerShown: true }} />
-    //         </Stack.Navigator>
-    //       </PersistGate>
-    //     </Provider>
-    //   </NavigationContainer>
-    // </PaperProvider>
+            </Stack.Navigator>
+          </NavigationContainer>
+        </PersistGate>
+      </Provider>
+    </PaperProvider>
   );
 }
 
 
 const styles = StyleSheet.create({
   header: {
-    // width:'100%',
-    // alignItems:'center',
-    // justifyContent:'center',
     elevation: 10,
     backgroundColor: color.NEW_BACKGROUND_COLOR,
     shadowColor: "#000",

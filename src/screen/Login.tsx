@@ -6,6 +6,8 @@ import {
     StyleSheet,
     TouchableOpacity,
     Button,
+    BackHandler,
+    Alert,
 } from "react-native";
 import Animated, {
     Easing,
@@ -19,8 +21,8 @@ import { color } from "../../assets/misc/colors";
 import { Formik, FormikErrors } from "formik";
 import { login_schema } from "../utilities/schema";
 import { useLoginMutation, useRegisterMutation } from "../services/api/authApiSlice";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { useState } from 'react'
+import { NavigationProp, useFocusEffect, useNavigation } from "@react-navigation/native";
+import React, { useState } from 'react'
 import CustoButton from "../components/CustoButton";
 import { useDispatch, useSelector } from "react-redux";
 import { selectCurrentToken, selectCurrentUser, setCredientials } from "../services/features/userSlice";
@@ -91,9 +93,31 @@ const Login: React.FC = () => {
         }
     }
 
-    if (token) {
-        navigator.navigate('HomeTabs')
-    }
+ 
+    useFocusEffect(
+        React.useCallback(() => {
+            const onBackPress = () => {
+
+                Alert.alert('Hold on!', 'Are you sure you want to exit?', [
+                    {
+                        text: 'Cancel',
+                        onPress: () => null,
+                        style: 'cancel',
+                    },
+                    { text: 'YES', onPress: () => BackHandler.exitApp() },
+                ]);
+                return true;
+            };
+
+            BackHandler.addEventListener('hardwareBackPress', onBackPress);
+            return () =>
+                BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+        }, []),
+    );
+
+ 
+
+
    
     return (
         <Formik

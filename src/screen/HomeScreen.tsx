@@ -8,12 +8,16 @@ import { color } from '../../assets/misc/colors'
 import ProductCardList from '../components/ProductCardList'
 import { NavigationProp, useFocusEffect, useNavigation, useRoute } from '@react-navigation/native'
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
+import { persistor, store } from '../services/store';
+import { useSelector } from 'react-redux'
+import { selectCurrentToken } from '../services/features/userSlice'
+import { Ionicons } from '@expo/vector-icons';
 
 const { height, width } = Dimensions.get('window')
 const slider_width = width * 0.7
 const HomeScreen = () => {
-    const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
     const navigator = useNavigation<NavigationProp<any>>()
+    const token = useSelector(selectCurrentToken)
 
 
     useFocusEffect(
@@ -49,61 +53,26 @@ const HomeScreen = () => {
         }
     };
 
-  
-
-    const styleX = useSharedValue(-width)
-
-    const xt = useAnimatedStyle(() => {
-        return {
-            transform: [
-                {
-                    translateX: withTiming(styleX.value, {
-                        duration: 400
-                    })
-                }
-            ]
-        }
-    })
-
-    useEffect(() => {
-        navigator.addListener('state', () => { styleX.value = -width })
-    }, [])
-
-
+    if (!token) {
+        navigator.navigate('Login', { replace: true })
+    }
 
     return (
         <SafeAreaView style={styles.container}>
-            <AnimatedTouchable style={[styles.container2, xt]}  activeOpacity={1}>
-                <View
-                    style={{
-                        height, width: slider_width, backgroundColor: color.NEW_BACKGROUND_COLOR,
-                        zIndex: 500, position: 'absolute', left: 0
-                    }}
-              />
-                <TouchableOpacity
-                activeOpacity={1}
-                    onPress={() => { styleX.value = -width }}
-                    style={{
-                        height, width: 100, backgroundColor: 'teal',
-                        zIndex: 500, position: 'absolute', right: 0
-                    }}
-                >
 
-                </TouchableOpacity>
-            </AnimatedTouchable >
+            <StatusBar backgroundColor={color.NEW_BACKGROUND_COLOR} barStyle="dark-content" />
             <View style={[styles.header,]}>
                 <View style={{ height: 50, width: 50 }}></View>
                 <Text style={styles.headerTitle}>POSTS</Text>
-                <TouchableOpacity onPress={() => { styleX.value = 0 }}>
-                    <Image
-                        resizeMode="contain"
-                        style={{ height: 40, width: 40, borderRadius: 50 }}
-                        source={require('../../assets/images/profile.png')}
-                    />
+                {/* <Image
+                    resizeMode="contain"
+                    style={{ height: 40, width: 40, borderRadius: 50 }}
+                    source={require('../../assets/images/filter.png')}
+                /> */}
+                <TouchableOpacity>
+                    <Ionicons name="settings-outline" size={26} color="black" />
                 </TouchableOpacity>
-
             </View>
-            <StatusBar backgroundColor={color.NEW_BACKGROUND_COLOR} barStyle="dark-content" />
             <ProductCardList />
         </SafeAreaView>
     )

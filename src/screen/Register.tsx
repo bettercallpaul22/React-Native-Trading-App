@@ -4,18 +4,16 @@ import {
     TextInput,
     ScrollView,
     StyleSheet,
-    Image,
     TouchableOpacity,
     RefreshControl
 } from "react-native";
 import Animated, {
-    Easing, useAnimatedStyle,
+    Easing,
     useSharedValue,
-    withTiming,
     FadeInUp
 }
     from "react-native-reanimated";
-import { AuthResponse, LoginValues } from "../../model";
+import { AuthResponse } from "../../model";
 import { fontSize } from "../../assets/misc/others";
 import { color } from "../../assets/misc/colors";
 import { Formik, FormikErrors } from "formik";
@@ -24,7 +22,6 @@ import { useRegisterMutation } from "../services/api/authApiSlice";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { useCallback, useEffect, useState } from 'react'
 import CustoButton from "../components/CustoButton";
-import { Header } from "../components/Header";
 import * as Location from 'expo-location';
 import axios from 'axios'
 
@@ -57,12 +54,8 @@ interface LocRes {
 const Login: React.FC = () => {
     const navigator = useNavigation<NavigationProp<any>>()
     const [signin, { isLoading }] = useRegisterMutation()
-    const random_width = useSharedValue(40)
-    const [emailErr, setEmailErr] = useState('')
-    const [passwordErr, setPasswordErr] = useState('')
     const [serverErr, setServerErr] = useState('')
     const [location, setLocation] = useState(null);
-    const [errorMsg, setErrorMsg] = useState(null);
     const [city, setCity] = useState('');
     const [state, setState] = useState('');
     const [country, setCountry] = useState('');
@@ -95,16 +88,7 @@ const Login: React.FC = () => {
 
 
 
-    const config = {
-        duration: 200,
-        easing: Easing.bezier(0.5, 0.01, 0.1, 0.05)
-    }
-
-    // const style = useAnimatedStyle(() => {
-    //     return {
-    //         width: withTiming(random_width.value, config)
-    //     }
-    // })
+  
 
     const validate_input = (errors: FormikErrors<InputType>) => {
         if (
@@ -200,7 +184,6 @@ const Login: React.FC = () => {
                                 inputMode="text"
                             />
                             {errors.firstName && touched.firstName ? <Text style={styles.error_text}>{errors.firstName}</Text> : ''}
-                            {/* {emailErr ? <Text style={styles.error_text}>{emailErr}</Text> : ''} */}
 
                         </View>
 
@@ -219,7 +202,6 @@ const Login: React.FC = () => {
                                 inputMode="text"
                             />
                             {errors.lastName && touched.lastName ? <Text style={styles.error_text}>{errors.lastName}</Text> : ''}
-                            {/* {emailErr ? <Text style={styles.error_text}>{emailErr}</Text> : ''} */}
 
                         </View>
                         <View style={errors.email && touched.email ? styles.input_wrapper_error : styles.input_wrapper}>
@@ -237,7 +219,6 @@ const Login: React.FC = () => {
                                 inputMode="email"
                             />
                             {errors.email && touched.email ? <Text style={styles.error_text}>{errors.email}</Text> : ''}
-                            {/* {emailErr ? <Text style={styles.error_text}>{emailErr}</Text> : ''} */}
 
                         </View>
 
