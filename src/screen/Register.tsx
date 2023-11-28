@@ -24,6 +24,9 @@ import { useCallback, useEffect, useState } from 'react'
 import CustoButton from "../components/CustoButton";
 import * as Location from 'expo-location';
 import axios from 'axios'
+import { setCredientials } from "../services/features/userSlice";
+import { AuthService } from "../services/authServices";
+import { useDispatch } from "react-redux";
 
 interface InputType {
     firstName: string;
@@ -51,7 +54,9 @@ interface LocRes {
 
 
 
-const Login: React.FC = () => {
+const Register: React.FC = () => {
+    const authService = new AuthService()
+    const dispatch = useDispatch()
     const navigator = useNavigation<NavigationProp<any>>()
     const [signin, { isLoading }] = useRegisterMutation()
     const [serverErr, setServerErr] = useState('')
@@ -107,6 +112,13 @@ const Login: React.FC = () => {
         const { firstName, lastName, email, password } = value
         try {
             const res: AuthResponse = await signin({ firstName, lastName, email, password, city, state, country }).unwrap()
+            if (res.success) {
+                dispatch(setCredientials(res))
+                authService.setUser(res.user)
+                authService.setUserToken(res.token)
+                authService.setUserId(res._id)
+                navigator.navigate('ButtomTabs')
+            }
         } catch (error) {
             setServerErr(error.data)
             console.log("error res", error)
@@ -296,7 +308,7 @@ const Login: React.FC = () => {
     );
 }
 
-export default Login
+export default Register
 
 const styles = StyleSheet.create({
     main: {

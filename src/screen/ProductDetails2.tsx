@@ -1,5 +1,5 @@
 import { useRoute } from '@react-navigation/native';
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -9,18 +9,26 @@ import {
   ImageBackground,
   Animated,
   useWindowDimensions,
+  Dimensions,
 } from 'react-native';
 import { Product } from '../../model';
 import { color } from '../../assets/misc/colors';
+import { fontSize } from '../../assets/misc/others';
+import Slider from '@react-native-community/slider';
+import CustoButton from '../components/CustoButton';
 
-const images = new Array(6).fill(
-  'https://images.unsplash.com/photo-1556740749-887f6717d7e4',
-);
+
+
+const {width} = Dimensions.get('screen')
+
 
 const ProductDetails2 = () => {
   const { params } = useRoute()
   const product: Product = params['data']
   const { images } = params['data']
+  const [offeredPrice, setofferedPrice] = useState(0)
+  const percentage = (offeredPrice / 3800) * 100
+
   const scrollX = useRef(new Animated.Value(0)).current;
 
   const {width: windowWidth} = useWindowDimensions();
@@ -46,7 +54,7 @@ const ProductDetails2 = () => {
                 },
               },
             },
-          ])}
+          ], {useNativeDriver: false})}
           scrollEventThrottle={1}>
           {img.map((image, imageIndex) => {
             return (
@@ -54,7 +62,7 @@ const ProductDetails2 = () => {
                 <ImageBackground source={{uri: image.image}} style={styles.card}>
                   <View style={styles.textContainer}>
                     <Text style={styles.infoText}>
-                      {product.product_name + imageIndex}
+                      {product.product_condition.toUpperCase()}
                     </Text>
                   </View>
                 </ImageBackground>
@@ -82,6 +90,57 @@ const ProductDetails2 = () => {
           })}
         </View>
       </View>
+      <View style={styles.product_details}>
+        <Text style={styles.product_title}>{product.product_name}</Text>
+        <Text style={styles.product_desc}>{product.product_desc}</Text>
+        <View style={styles.other_details}>
+          <Text style={styles.left}>Product Value</Text>
+          <Text style={styles.right}>₦{product.product_price}</Text>
+        </View>
+
+        <View style={styles.other_details}>
+          <Text style={styles.left}>Product Condition</Text>
+          <Text style={styles.right}>{product.product_condition}</Text>
+        </View>
+      </View>
+
+      <View style={{ width, paddingHorizontal: 15, marginTop: 0 }}>
+        <Text style={{ fontSize: fontSize.xm, paddingHorizontal: 15, fontWeight: '600', color: 'gray' }}>
+          Move the slider to make an offer
+        </Text>
+        <Slider
+
+          style={{ width: '100%' }}
+          minimumValue={0}
+          maximumValue={product.product_price * 2}
+          minimumTrackTintColor="purple"
+          maximumTrackTintColor="#000"
+          focusable
+          // lowerLimit={20}
+          step={10}
+          thumbTintColor='purple'
+          onValueChange={(e) => {
+            setofferedPrice(e)
+          }}
+        />
+        {/* <Text
+          style={[{
+            left: `${percentage.toString()}%`,
+            position: 'absolute',
+            top: 10
+          }, styles.left]}
+        >
+          {offeredPrice}
+        </Text> */}
+      </View>
+      <View style={{ paddingHorizontal: 30, width, marginTop: 20 }}>
+
+<CustoButton
+  onPress={() => { }}
+  title={`Send Offer ${offeredPrice}`}
+  color='purple'
+/>
+</View>
     </SafeAreaView>
   );
 };
@@ -99,6 +158,7 @@ const styles = StyleSheet.create({
     height: 300,
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom:20
   },
   card: {
     flex: 1,
@@ -111,16 +171,17 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     backgroundColor: 'rgba(0,0,0, 0.7)',
-    paddingHorizontal: 24,
+    paddingHorizontal: 10,
     paddingVertical: 8,
     borderRadius: 5,
+    position:'absolute',
+    right:5,
+    top:5
   },
   infoText: {
     color: 'white',
-    fontSize: 16,
+    fontSize: fontSize.xm,
     fontWeight: 'bold',
-    // position:'absolute',
-    right:0
   },
   normalDot: {
     height: 8,
@@ -134,6 +195,45 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+
+
+  
+  product_details: {
+    height: 200,
+    width:'100%',
+    padding: 20,
+    gap: 5,
+    marginBottom: 20
+  },
+  product_title: {
+    // backgroundColor: 'yellow',
+    fontWeight: '700',
+    fontSize: fontSize.lg
+  },
+  product_desc: {
+    fontWeight: '700',
+    fontSize: fontSize.sm,
+    color: 'gray'
+  },
+
+  other_details: {
+    // backgroundColor: 'plum',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    // borderWidth:1,
+    borderBottomColor: 'purple',
+    borderBottomWidth: 0.8,
+    marginBottom: 5
+  },
+  left: {
+    fontWeight: '500',
+    fontSize: fontSize.sm
+  },
+  right: {
+    fontWeight: '500',
+    fontSize: fontSize.lg
+  }
 });
 
 export default ProductDetails2;

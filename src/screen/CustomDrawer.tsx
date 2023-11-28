@@ -8,12 +8,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logOut, selectCurrentUser } from '../services/features/userSlice';
 import { User } from '../../model';
 import { Ionicons } from '@expo/vector-icons';
+import { AuthService } from '../services/authServices';
 const { width, height } = Dimensions.get('screen')
 const profile_header_height = height / 5
 
 
 
 const CustomDrawer = (props) => {
+    const authService = new AuthService()
     const dispatch = useDispatch()
     const user: User = useSelector(selectCurrentUser)
     // console.log("user", user === null)
@@ -59,6 +61,7 @@ const CustomDrawer = (props) => {
             <DrawerItemList {...props} />
             <TouchableOpacity
                 onPress={() => { 
+                    authService.clearUser()
                     dispatch(logOut())
                     // persistor.purge().then((res)=>console.log('persist purge res', res))
                     // .catch((err)=>console.log('err', err))

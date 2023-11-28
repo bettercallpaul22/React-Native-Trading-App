@@ -45,16 +45,11 @@ const DrawerNavigator = () => {
 const App = () => {
   const authService = new AuthService()
   const [user, setuser] = React.useState({})
-  React.useLayoutEffect(() => {
-    authService.getUser()
-      .then(res => console.log(setuser(user)))
-      .catch(err => console.log('err', err))
 
-  }, [])
 
   const [token, settoken] = React.useState('')
 
-  const get_token = async () => {
+  const get_user_data = async () => {
     const token = await authService.getUserToken() as string
     const user = await authService.getUser() as User
     if (token !== null) {
@@ -63,10 +58,11 @@ const App = () => {
     }
   }
   React.useEffect(() => {
-    get_token()
+    get_user_data()
   }, [])
 
-  // console.log("user", user)
+  console.log("user", user)
+  console.log("token", token)
 
 
   return (

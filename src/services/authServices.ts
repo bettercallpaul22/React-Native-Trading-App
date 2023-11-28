@@ -72,15 +72,14 @@ export class AuthService {
   }
 
 
-  clearUser() {
-    async () => {
+  async clearUser() {
       try {
         await AsyncStorage.removeItem(USER)
         await AsyncStorage.removeItem(USER_ID_KEY)
         await AsyncStorage.removeItem(USER_TOKEN_KEY)
       } catch (e) {
+        console.log('error clearing storage', e)
         // remove error
-      }
     }
 
   }
