@@ -117,7 +117,7 @@ const Register: React.FC = () => {
                 authService.setUser(res.user)
                 authService.setUserToken(res.token)
                 authService.setUserId(res._id)
-                navigator.navigate('ButtomTabs')
+                navigator.navigate('Home')
             }
         } catch (error) {
             setServerErr(error.data)

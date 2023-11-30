@@ -76,7 +76,7 @@ const Login: React.FC = () => {
                 authService.setUser(res.user)
                 authService.setUserToken(res.token)
                 authService.setUserId(res._id)
-                navigator.navigate('ButtomTabs')
+                navigator.navigate('Home')
             }
             // console.log("res", res)
         } catch (error) {

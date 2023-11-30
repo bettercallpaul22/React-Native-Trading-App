@@ -35,8 +35,8 @@ const DrawerNavigator = () => {
     }}
 
   >
-    <Drawer.Screen options={{ headerShown: false }} name='ButtomTabs' component={ButtomTabs} />
-    <Drawer.Screen options={{ headerShown: false }} name='Profile' component={Profile} />
+    <Drawer.Screen options={{ headerShown: true }} name='Home' component={ButtomTabs} />
+    <Drawer.Screen options={{ headerShown: true }} name='Profile' component={Profile} />
   </Drawer.Navigator>
 
 }
@@ -61,8 +61,8 @@ const App = () => {
     get_user_data()
   }, [])
 
-  console.log("user", user)
-  console.log("token", token)
+  // console.log("user", user)
+  // console.log("token", token)
 
 
   return (

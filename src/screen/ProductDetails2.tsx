@@ -1,5 +1,5 @@
 import { useRoute } from '@react-navigation/native';
-import React, {useRef, useState} from 'react';
+import React, { useRef, useState } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -19,7 +19,7 @@ import CustoButton from '../components/CustoButton';
 
 
 
-const {width} = Dimensions.get('screen')
+const { width } = Dimensions.get('screen')
 
 
 const ProductDetails2 = () => {
@@ -31,7 +31,7 @@ const ProductDetails2 = () => {
 
   const scrollX = useRef(new Animated.Value(0)).current;
 
-  const {width: windowWidth} = useWindowDimensions();
+  const { width: windowWidth } = useWindowDimensions();
 
   const img: {
     _id: number;
@@ -54,12 +54,12 @@ const ProductDetails2 = () => {
                 },
               },
             },
-          ], {useNativeDriver: false})}
+          ], { useNativeDriver: false })}
           scrollEventThrottle={1}>
           {img.map((image, imageIndex) => {
             return (
-              <View style={{width: windowWidth, height: 250}} key={imageIndex}>
-                <ImageBackground source={{uri: image.image}} style={styles.card}>
+              <View style={{ width: windowWidth, height: 250 }} key={imageIndex}>
+                <ImageBackground source={{ uri: image.image }} style={styles.card}>
                   <View style={styles.textContainer}>
                     <Text style={styles.infoText}>
                       {product.product_condition.toUpperCase()}
@@ -84,7 +84,7 @@ const ProductDetails2 = () => {
             return (
               <Animated.View
                 key={imageIndex}
-                style={[styles.normalDot, {width}]}
+                style={[styles.normalDot, { width }]}
               />
             );
           })}
@@ -100,7 +100,7 @@ const ProductDetails2 = () => {
 
         <View style={styles.other_details}>
           <Text style={styles.left}>Product Condition</Text>
-          <Text style={styles.right}>{product.product_condition}</Text>
+          <Text style={styles.right}>{product.product_condition.toUpperCase()}</Text>
         </View>
       </View>
 
@@ -135,12 +135,12 @@ const ProductDetails2 = () => {
       </View>
       <View style={{ paddingHorizontal: 30, width, marginTop: 20 }}>
 
-<CustoButton
-  onPress={() => { }}
-  title={`Send Offer ${offeredPrice}`}
-  color='purple'
-/>
-</View>
+        <CustoButton
+          onPress={() => { }}
+          title={`Send Offer ${offeredPrice}`}
+          color='purple'
+        />
+      </View>
     </SafeAreaView>
   );
 };
@@ -150,15 +150,15 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     // justifyContent: 'center',
-    
-    backgroundColor:color.NEW_BACKGROUND_COLOR,
-    paddingTop:20,
+
+    backgroundColor: color.NEW_BACKGROUND_COLOR,
+    paddingTop: 20,
   },
   scrollContainer: {
     height: 300,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom:20
+    marginBottom: 20
   },
   card: {
     flex: 1,
@@ -174,9 +174,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 8,
     borderRadius: 5,
-    position:'absolute',
-    right:5,
-    top:5
+    position: 'absolute',
+    right: 5,
+    top: 5
   },
   infoText: {
     color: 'white',
@@ -197,10 +197,10 @@ const styles = StyleSheet.create({
   },
 
 
-  
+
   product_details: {
     height: 200,
-    width:'100%',
+    width: '100%',
     padding: 20,
     gap: 5,
     marginBottom: 20
@@ -213,7 +213,8 @@ const styles = StyleSheet.create({
   product_desc: {
     fontWeight: '700',
     fontSize: fontSize.sm,
-    color: 'gray'
+    color: 'gray',
+    marginBottom: 10
   },
 
   other_details: {
@@ -224,15 +225,15 @@ const styles = StyleSheet.create({
     // borderWidth:1,
     borderBottomColor: 'purple',
     borderBottomWidth: 0.8,
-    marginBottom: 5
+    marginBottom: 10
   },
   left: {
     fontWeight: '500',
-    fontSize: fontSize.sm
+    fontSize: fontSize.xm
   },
   right: {
     fontWeight: '500',
-    fontSize: fontSize.lg
+    fontSize: fontSize.xm
   }
 });
 

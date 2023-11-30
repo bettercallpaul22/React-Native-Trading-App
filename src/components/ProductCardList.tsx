@@ -57,6 +57,8 @@ const ProductCardList = () => {
         </View>
     </ScrollView>
 // console.log("product", product_data.map((product)=>product.images.map((img)=>img['image'])))
+
+console.log(product_data)
     return (
         <View style={{ backgroundColor: color.NEW_BACKGROUND_COLOR, }}>
 
@@ -147,24 +149,6 @@ const ProductCardList = () => {
                             </Text>
                         </View>
 
-                        {/* <CustoButton
-                            color={'purple'}
-                            title={
-                                item.deal_type === 'Cash Sale' ?  // go remove the spacing
-                                    'for sale & cash only'
-                                    :
-                                    item.deal_type === 'Swap & Add Cash' ?
-
-                                        'Swap & add cash'
-                                        :
-                                        item.deal_type === 'Swap Only' ?
-                                            'Swap Only'
-                                            : ''
-                            }
-                            onPress={() => {
-                                navigator.navigate('ProductView', {data:item, images:item.images})
-                            }}
-                        /> */}
                     </AnimatedTouchable>
 
                 }}

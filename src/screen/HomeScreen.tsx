@@ -61,18 +61,13 @@ const HomeScreen = () => {
         <SafeAreaView style={styles.container}>
 
             <StatusBar backgroundColor={color.NEW_BACKGROUND_COLOR} barStyle="dark-content" />
-            <View style={[styles.header,]}>
+            {/* <View style={[styles.header,]}>
                 <View style={{ height: 50, width: 50 }}></View>
                 <Text style={styles.headerTitle}>POSTS</Text>
-                {/* <Image
-                    resizeMode="contain"
-                    style={{ height: 40, width: 40, borderRadius: 50 }}
-                    source={require('../../assets/images/filter.png')}
-                /> */}
                 <TouchableOpacity>
                     <Ionicons name="settings-outline" size={26} color="black" />
                 </TouchableOpacity>
-            </View>
+            </View> */}
             <ProductCardList />
         </SafeAreaView>
     )

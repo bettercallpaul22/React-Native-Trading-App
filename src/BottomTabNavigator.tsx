@@ -59,6 +59,7 @@ const BottomTabNavigator: React.FC = () => {
                     name='ListItem'
                     component={ListItem}
                     options={{
+                        headerShown: false,
                         tabBarIcon: ({ focused }) => (
                             <AntDesign name="plus" size={24} color={focused ? "purple" : "black"} />
                         )
