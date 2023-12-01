@@ -1,4 +1,4 @@
-import { Dimensions, Image, SafeAreaView,  StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Dimensions, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { color } from '../../assets/misc/colors'
 import { fontSize } from '../../assets/misc/others'
@@ -6,32 +6,34 @@ import { Entypo } from '@expo/vector-icons';
 import ProductCardList from '../components/ProductCardList';
 import { ScrollView } from 'react-native-virtualized-view'
 import { FontAwesome5 } from '@expo/vector-icons';
+import { useSelector } from 'react-redux';
+import { selectCurrentUser } from '../services/features/userSlice';
+import { User } from '../../model';
 
 const { width } = Dimensions.get('screen')
 
 const Profile = () => {
+  const user: User = useSelector(selectCurrentUser)
+
   return (
     <View style={styles.container}>
-        <TouchableOpacity
-                onPress={() => { 
-                
-                 }}
-                style={{ 
-                    backgroundColor:'rgb(216,191,216)',
-                     position: 'absolute',
-                      top: 20,
-                       right: 20,
-                       flexDirection:'row',
-                       gap:10,
-                       alignItems:'center',
-                       borderRadius:5,
-                       padding:5,
-                       zIndex:1
-                     }}
-            >
-                <FontAwesome5 name="user-edit" size={22} color="black" />
-                <Text style={{ fontSize: fontSize.xm, fontWeight:'600', letterSpacing:1 }}>EDIT</Text>
-            </TouchableOpacity>
+      {/* <TouchableOpacity
+        onPress={() => {
+
+        }}
+        style={styles.edit_follow_container}
+      >
+        <FontAwesome5 name="user-edit" size={22} color="black" />
+        <Text style={{ fontSize: fontSize.xm, fontWeight: '600', letterSpacing: 1 }}>EDIT</Text>
+      </TouchableOpacity> */}
+
+     { <View style={styles.follow_container} >
+        <TouchableOpacity style={{ backgroundColor: 'rgb(216,191,216)', padding: 5, borderRadius: 10 }}>
+          <Text style={{ fontSize: 12, fontWeight: '600', letterSpacing: 1 }}>FOLLOWING</Text>
+        </TouchableOpacity>
+        <Entypo name="mail" size={24} color="black" />
+      </View>}
+
       <View style={{ alignItems: 'center', gap: 5, padding: 20 }}>
         <View style={styles.image_container}>
           <Image
@@ -39,11 +41,11 @@ const Profile = () => {
             source={require('../../assets/images/profile.png')}
           />
         </View>
-        <Text style={styles.profile_name}>OBARO PAUL</Text>
+        <Text style={styles.profile_name}>{user.firstName.toUpperCase()} {user.lastName.toUpperCase()}</Text>
 
         <View style={styles.location_container}>
           <Entypo name="location-pin" size={24} color="gray" />
-          <Text style={{ fontWeight: '600', color: 'gray' }}>lagos nigeria</Text>
+          <Text style={{ fontWeight: '600', color: 'gray' }}>{user.city} {user.state} {user.country}</Text>
         </View>
         <View style={{ flexDirection: 'row', gap: 20, width: '100%', }}>
 
@@ -62,8 +64,9 @@ const Profile = () => {
           "Try it Yourself" editor, you can edit and test each example yourself!
         </Text>
       </View>
-      <Text style={{marginLeft:20, fontWeight:'600', fontSize:fontSize.lg}}>Recent Post</Text>
-      <ScrollView contentContainerStyle={{padding:20}} style={{}}>
+      <Text style={{ marginLeft: 20, fontWeight: '600', fontSize: fontSize.lg , }}>Recent Post</Text>
+      <View style={{ width, borderWidth:0.5, borderColor:'purple'}}></View>
+      <ScrollView contentContainerStyle={{ padding: 20 }} style={{}}>
 
         <ProductCardList />
 
@@ -118,5 +121,30 @@ const styles = StyleSheet.create({
     width: '100%',
     // height:30,
     alignItems: 'center',
+  },
+  edit_follow_container: {
+    backgroundColor: 'rgb(216,191,216)',
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    flexDirection: 'row',
+    gap: 10,
+    alignItems: 'center',
+    borderRadius: 5,
+    padding: 5,
+    zIndex: 1
+  },
+
+  follow_container: {
+
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    // flexDirection: 'column',
+    gap: 10,
+    alignItems: 'center',
+    borderRadius: 5,
+    padding: 5,
+    zIndex: 1
   }
 })

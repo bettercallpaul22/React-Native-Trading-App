@@ -1,4 +1,4 @@
-import { useRoute } from '@react-navigation/native';
+import { NavigationProp, useNavigation, useRoute } from '@react-navigation/native';
 import React, { useRef, useState } from 'react';
 import {
   SafeAreaView,
@@ -10,6 +10,8 @@ import {
   Animated,
   useWindowDimensions,
   Dimensions,
+  Image,
+  TouchableOpacity,
 } from 'react-native';
 import { Product } from '../../model';
 import { color } from '../../assets/misc/colors';
@@ -23,6 +25,7 @@ const { width } = Dimensions.get('screen')
 
 
 const ProductDetails2 = () => {
+  const navigator = useNavigation<NavigationProp<any>>()
   const { params } = useRoute()
   const product: Product = params['data']
   const { images } = params['data']
@@ -90,6 +93,53 @@ const ProductDetails2 = () => {
           })}
         </View>
       </View>
+      <View style={{
+        width,
+        paddingHorizontal: 20,
+        flexDirection: 'row',
+        gap: 10,
+        borderBottomWidth: 1,
+        borderColor: 'purple',
+        alignItems: 'center',
+        paddingBottom: 5
+      }}
+      >
+        <TouchableOpacity
+          onPress={() => {
+            navigator.navigate('Profile')
+          }}
+          style={{
+            height: 50, width: 50, backgroundColor: 'purple',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: 50
+          }}>
+          <Image
+            style={{ height: '95%', width: '95%', borderRadius: 50 }}
+            source={require('../../assets/images/profile.png')}
+          />
+        </TouchableOpacity>
+
+        <View>
+          <Text style={{ fontWeight: '600', fontSize: 12 }}>John doe</Text>
+          <Text style={{ fontWeight: '600', fontSize: 12, color: 'gray' }}>lagos Nigeria</Text>
+        </View>
+
+        <TouchableOpacity style={{
+          backgroundColor: 'rgb(216,191,216)',
+          padding: 5, borderRadius: 10,
+          height: 30,
+          position: 'absolute',
+          right: 20,
+          top: 10,
+          alignItems:'center',
+          justifyContent:'center'
+
+        }}>
+          <Text style={{ fontSize: 12, fontWeight: '700', letterSpacing: 1 }}>FOLLOW SELLER</Text>
+        </TouchableOpacity>
+
+      </View>
       <View style={styles.product_details}>
         <Text style={styles.product_title}>{product.product_name}</Text>
         <Text style={styles.product_desc}>{product.product_desc}</Text>
@@ -133,7 +183,7 @@ const ProductDetails2 = () => {
           {offeredPrice}
         </Text> */}
       </View>
-      <View style={{ paddingHorizontal: 30, width, marginTop: 20 }}>
+      <View style={{ paddingHorizontal: 30, width, position: 'absolute', bottom: 20 }}>
 
         <CustoButton
           onPress={() => { }}
@@ -199,11 +249,12 @@ const styles = StyleSheet.create({
 
 
   product_details: {
+    // backgroundColor: 'lightblue',
     height: 200,
     width: '100%',
     padding: 20,
     gap: 5,
-    marginBottom: 20
+    // marginBottom: 20
   },
   product_title: {
     // backgroundColor: 'yellow',

@@ -134,19 +134,16 @@ console.log(product_data)
                                 <Text style={styles.item_name}> ₦{item.product_price}</Text>
                             </View>
 
-                            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', }}>
+                            {/* <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', }}>
                                 <Text style={{ fontSize: fontSize.xm, fontWeight: '500' }}>Owner</Text>
                                 <Text style={styles.item_name}>Obaro Paul</Text>
-                            </View>
+                            </View> */}
 
                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', }}>
                                 <Text style={{ fontSize: fontSize.xm, fontWeight: '500' }}>Deal Type</Text>
                                 <Text style={styles.item_name}>{item.deal_type}</Text>
                             </View>
-                            <Text style={styles.item_desc}>
-                                ipsum is a placeholder text commonly used to
-                                or a typeface without relying on meaningful content. Lor
-                            </Text>
+                            <Text style={styles.item_desc}>{item.product_desc}</Text>
                         </View>
 
                     </AnimatedTouchable>

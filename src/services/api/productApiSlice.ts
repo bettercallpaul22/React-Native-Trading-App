@@ -5,7 +5,7 @@ const authService = new AuthService()
 
 export const userApiSlice = apiSlice.injectEndpoints({
     endpoints:(builder) => ({
-        get_all_products:builder.query<Product[],  void>({
+        get_all_products:builder.query<Product [],  void>({
             query: (userId)=>`api/product/all`
         }),
 
