@@ -23,6 +23,9 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { manipulateAsync, ActionResize, SaveFormat } from 'expo-image-manipulator';
 import { useCreate_productMutation } from '../services/api/productApiSlice';
 import { fontSize } from '../../assets/misc/others';
+import { useSelector } from 'react-redux';
+import { selectCurrentUser } from '../services/features/userSlice';
+import { User } from '../../model';
 
 const { width } = Dimensions.get('window');
 interface ImageType {
@@ -38,6 +41,7 @@ interface InputPros {
 
 
 const ListItem = () => {
+    const current_user:User = useSelector(selectCurrentUser)
     const [image, setImage] = useState(null);
     const [categorySelected, setcategorySelected] = useState('')
     const [dealType, setDealType] = useState('')
@@ -51,11 +55,6 @@ const ListItem = () => {
     const [imageArr, setimageArr] = useState<ImageType[]>([])
     const [post_item, { isLoading }] = useCreate_productMutation()
     const [modalVisible, setModalVisible] = useState(false);
-
-
-
-
-
 
 
     const pickImage = async () => {
@@ -99,7 +98,7 @@ const ListItem = () => {
 
         ) return
         const item_data = {
-            owner_id: '6788766755ee6tyu',
+            owner_id:current_user._id,
             product_name: values.item_name,
             product_price: parseInt(values.item_price),
             product_category: categorySelected,

@@ -9,6 +9,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../services/features/userSlice';
 import { User } from '../../model';
+import UserProductCard from '../components/UserProductCard';
 
 const { width } = Dimensions.get('screen')
 
@@ -68,7 +69,7 @@ const Profile = () => {
       <View style={{ width, borderWidth:0.5, borderColor:'purple'}}></View>
       <ScrollView contentContainerStyle={{ padding: 20 }} style={{}}>
 
-        <ProductCardList />
+        <UserProductCard />
 
       </ScrollView>
       {/* <View>

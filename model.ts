@@ -36,6 +36,7 @@ export interface Product{
 
 
 export type User = {
+    _id: String,
     firstName: String,
     lastName: String,
     userName: String,

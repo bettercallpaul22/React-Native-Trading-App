@@ -16,10 +16,13 @@ const { height, width } = Dimensions.get('window')
 const SPACING = 20
 const CARD_HEIGHT = 150
 import { Entypo } from '@expo/vector-icons';
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { Product, User } from '../../model'
+import { selectCurrentToken, selectCurrentUser } from '../services/features/userSlice'
 
 
-const ProductCardList = () => {
+const UserProductCard = () => {
+    const current_user:User = useSelector(selectCurrentUser)
     const [refreshing, setRefreshing] = useState(false);
     const dispatch = useDispatch()
     const navigator = useNavigation<NavigationProp<any>>()
@@ -57,6 +60,9 @@ const ProductCardList = () => {
         </View>
     </ScrollView>
 
+    const filter_product = product_data.filter((product) => product.owner_id === current_user._id)
+   
+
     return (
         <View style={{ backgroundColor: color.NEW_BACKGROUND_COLOR, }}>
 
@@ -68,7 +74,7 @@ const ProductCardList = () => {
                 )}
                 maxToRenderPerBatch={12}
                 contentContainerStyle={{ padding: SPACING, }}
-                data={product_data}
+                data={filter_product}
                 renderItem={({ item, index }) => {
                     const ITEM_SIZE = CARD_HEIGHT + SPACING
                     const inputRange = [
@@ -152,7 +158,7 @@ const ProductCardList = () => {
     )
 }
 
-export default ProductCardList
+export default UserProductCard
 
 const styles = StyleSheet.create({
 
