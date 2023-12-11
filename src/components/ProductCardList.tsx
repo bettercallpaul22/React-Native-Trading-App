@@ -93,7 +93,7 @@ const ProductCardList = () => {
                     return <AnimatedTouchable
                         style={[styles.item_card, { transform: [{ scale, }], }]}
                         onPress={() => {
-                            navigator.navigate('ProductDetails2', { data: item, images: item.images })
+                            navigator.navigate('ProductDetails2', { data: item })
                         }}
                     >
                         {item.product_condition === "Fairy Used" && <Text

@@ -18,6 +18,7 @@ import { color } from '../../assets/misc/colors';
 import { fontSize } from '../../assets/misc/others';
 import Slider from '@react-native-community/slider';
 import CustoButton from '../components/CustoButton';
+import { useGet_productQuery } from '../services/api/productApiSlice';
 
 
 
@@ -28,18 +29,59 @@ const ProductDetails2 = () => {
   const navigator = useNavigation<NavigationProp<any>>()
   const { params } = useRoute()
   const product: Product = params['data']
-  const { images } = params['data']
+  const { isLoading, data: product_data, isError, error } = useGet_productQuery({ product_id: product._id, owner_id: product.owner_id })
+
+
   const [offeredPrice, setofferedPrice] = useState(0)
-  const percentage = (offeredPrice / 3800) * 100
-
+  // const percentage = (offeredPrice / 3800) * 100
   const scrollX = useRef(new Animated.Value(0)).current;
-
   const { width: windowWidth } = useWindowDimensions();
+
+  if (isLoading) {
+    return <View style={{
+      backgroundColor: color.NEW_BACKGROUND_COLOR,
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+    }}>
+      <Text
+        style={{
+          backgroundColor: 'rgba(0,0,0, 0.7)',
+          paddingHorizontal: 10,
+          paddingVertical: 8,
+          borderRadius: 5,
+          color: '#fff'
+        }}
+      >
+        Getting Product Details
+      </Text>
+    </View>
+  }
+
+  if (isError) {
+    return <View style={{
+      backgroundColor: color.NEW_BACKGROUND_COLOR,
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+    }}>
+      <Text
+        style={{
+          backgroundColor: 'rgba(0,0,0, 0.7)',
+          paddingHorizontal: 10,
+          paddingVertical: 8,
+          borderRadius: 5,
+          color: '#fff'
+        }}
+      >Something went wrong</Text>
+    </View>
+  }
+  const { product_owner, product: product_ } = product_data
 
   const img: {
     _id: number;
     image: string;
-  }[] = images
+  }[] = product_.images as any
 
 
   return (
@@ -65,7 +107,7 @@ const ProductDetails2 = () => {
                 <ImageBackground source={{ uri: image.image }} style={styles.card}>
                   <View style={styles.textContainer}>
                     <Text style={styles.infoText}>
-                      {product.product_condition.toUpperCase()}
+                      {product_.product_condition.toUpperCase()}
                     </Text>
                   </View>
                 </ImageBackground>
@@ -74,7 +116,7 @@ const ProductDetails2 = () => {
           })}
         </ScrollView>
         <View style={styles.indicatorContainer}>
-          {images.map((image, imageIndex) => {
+          {img.map((image, imageIndex) => {
             const width = scrollX.interpolate({
               inputRange: [
                 windowWidth * (imageIndex - 1),
@@ -106,7 +148,7 @@ const ProductDetails2 = () => {
       >
         <TouchableOpacity
           onPress={() => {
-            navigator.navigate('Profile')
+            navigator.navigate('SellerProfile')
           }}
           style={{
             height: 50, width: 50, backgroundColor: 'purple',
@@ -121,8 +163,8 @@ const ProductDetails2 = () => {
         </TouchableOpacity>
 
         <View>
-          <Text style={{ fontWeight: '600', fontSize: 12 }}>John doe</Text>
-          <Text style={{ fontWeight: '600', fontSize: 12, color: 'gray' }}>lagos Nigeria</Text>
+          <Text style={{ fontWeight: '600', fontSize: 12 }}>{product_owner.firstName} {product_owner.lastName}</Text>
+          <Text style={{ fontWeight: '600', fontSize: 12, color: 'gray' }}>{product_owner.city} {product_owner.state}</Text>
         </View>
 
         <TouchableOpacity style={{
@@ -132,8 +174,8 @@ const ProductDetails2 = () => {
           position: 'absolute',
           right: 20,
           top: 10,
-          alignItems:'center',
-          justifyContent:'center'
+          alignItems: 'center',
+          justifyContent: 'center'
 
         }}>
           <Text style={{ fontSize: 12, fontWeight: '700', letterSpacing: 1 }}>FOLLOW SELLER</Text>
@@ -141,16 +183,16 @@ const ProductDetails2 = () => {
 
       </View>
       <View style={styles.product_details}>
-        <Text style={styles.product_title}>{product.product_name}</Text>
-        <Text style={styles.product_desc}>{product.product_desc}</Text>
+        <Text style={styles.product_title}>{product_.product_name}</Text>
+        <Text style={styles.product_desc}>{product_.product_desc}</Text>
         <View style={styles.other_details}>
           <Text style={styles.left}>Product Value</Text>
-          <Text style={styles.right}>₦{product.product_price}</Text>
+          <Text style={styles.right}>₦{product_.product_price}</Text>
         </View>
 
         <View style={styles.other_details}>
           <Text style={styles.left}>Product Condition</Text>
-          <Text style={styles.right}>{product.product_condition.toUpperCase()}</Text>
+          <Text style={styles.right}>{product_.product_condition.toUpperCase()}</Text>
         </View>
       </View>
 
@@ -162,7 +204,7 @@ const ProductDetails2 = () => {
 
           style={{ width: '100%' }}
           minimumValue={0}
-          maximumValue={product.product_price * 2}
+          maximumValue={product_.product_price * 2}
           minimumTrackTintColor="purple"
           maximumTrackTintColor="#000"
           focusable

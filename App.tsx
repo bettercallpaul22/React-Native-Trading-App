@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Register from './src/screen/Register';
 import Profile from './src/screen/Profile';
 import ProductDetails2 from './src/screen/ProductDetails2';
+import SellerProfile from './src/screen/SellerProfile';
 import { Provider } from 'react-redux';
 import { persistor, store } from './src/services/store';
 import { PaperProvider } from 'react-native-paper';
@@ -96,6 +97,7 @@ const App = () => {
               <Stack.Screen name='Register' component={Register} options={{ headerShown: true }} />
               <Stack.Screen name='Login' component={Login} options={{ headerShown: true, headerBackVisible: false }} />
               <Stack.Screen name='ProductDetails2' component={ProductDetails2} options={{ headerShown: true }} />
+              <Stack.Screen name='SellerProfile' component={SellerProfile} options={{ headerShown: true }} />
 
             </Stack.Navigator>
           </NavigationContainer>
