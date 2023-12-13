@@ -1,5 +1,5 @@
 import { Dimensions, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useCallback } from 'react'
 import { color } from '../../assets/misc/colors'
 import { fontSize } from '../../assets/misc/others'
 import { Entypo } from '@expo/vector-icons';
@@ -10,11 +10,33 @@ import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../services/features/userSlice';
 import { User } from '../../model';
 import UserProductCard from '../components/UserProductCard';
+import { useGet_user_productsQuery } from '../services/api/productApiSlice';
 
 const { width } = Dimensions.get('screen')
 
 const SellerProfile = () => {
   const user: User = useSelector(selectCurrentUser)
+  const owner_id = user._id as string
+  const { isLoading, data } = useGet_user_productsQuery({owner_id})
+
+  const onRefresh = useCallback(() => {
+    // setRefreshing(lasyLoading);
+    // fetch_products()
+    setTimeout(() => {
+        // setRefreshing(lasyLoading);
+    }, 5000);
+}, []);
+
+
+
+
+
+
+
+
+
+
+
 
   return (
     <View style={styles.container}>
@@ -69,7 +91,7 @@ const SellerProfile = () => {
       <View style={{ width, borderWidth:0.5, borderColor:'purple'}}></View>
       <ScrollView contentContainerStyle={{ padding: 20 }} style={{}}>
 
-        <UserProductCard />
+        <UserProductCard data={data.product} />
 
       </ScrollView>
       {/* <View>

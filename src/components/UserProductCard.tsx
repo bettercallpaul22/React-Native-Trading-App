@@ -20,8 +20,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Product, User } from '../../model'
 import { selectCurrentToken, selectCurrentUser } from '../services/features/userSlice'
 
-
-const UserProductCard = () => {
+interface Data{
+    data:Product[]
+}
+const UserProductCard:React.FC<Data> = ({data}) => {
     const current_user:User = useSelector(selectCurrentUser)
     const [refreshing, setRefreshing] = useState(false);
     const dispatch = useDispatch()
@@ -60,7 +62,7 @@ const UserProductCard = () => {
         </View>
     </ScrollView>
 
-    const filter_product = product_data.filter((product) => product.owner_id === current_user._id)
+    // const filter_product = product_data.filter((product) => product.owner_id === current_user._id)
    
 
     return (
@@ -74,7 +76,7 @@ const UserProductCard = () => {
                 )}
                 maxToRenderPerBatch={12}
                 contentContainerStyle={{ padding: SPACING, }}
-                data={filter_product}
+                data={data}
                 renderItem={({ item, index }) => {
                     const ITEM_SIZE = CARD_HEIGHT + SPACING
                     const inputRange = [

@@ -10,12 +10,10 @@ import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../services/features/userSlice';
 import { User } from '../../model';
 import UserProductCard from '../components/UserProductCard';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
 
 const { width } = Dimensions.get('screen')
 
-const Profile = () => {
-  const navigator = useNavigation<NavigationProp<any>>()
+const EditProfile = () => {
   const user: User = useSelector(selectCurrentUser)
 
   return (
@@ -31,15 +29,10 @@ const Profile = () => {
       </TouchableOpacity> */}
 
      { <View style={styles.follow_container} >
-        <TouchableOpacity 
-        style={{ backgroundColor: 'rgb(216,191,216)', padding: 5, borderRadius: 10 }}
-        onPress={()=>{
-          navigator.navigate('EditProfile')
-        }}
-        >
-          <Text style={{ fontSize: 12, fontWeight: '600', letterSpacing: 1 }}>EDIT PROFILE</Text>
+        <TouchableOpacity style={{ backgroundColor: 'rgb(216,191,216)', padding: 5, borderRadius: 10 }}>
+          <Text style={{ fontSize: 12, fontWeight: '600', letterSpacing: 1 }}>FOLLOWING</Text>
         </TouchableOpacity>
-        {/* <Entypo name="mail" size={24} color="black" /> */}
+        <Entypo name="mail" size={24} color="black" />
       </View>}
 
       <View style={{ alignItems: 'center', gap: 5, padding: 20 }}>
@@ -72,13 +65,12 @@ const Profile = () => {
           "Try it Yourself" editor, you can edit and test each example yourself!
         </Text>
       </View>
-      <Text style={{ marginLeft: 20, fontWeight: '600', fontSize: fontSize.lg , }}>Recent Post</Text>
-      <View style={{ width, borderWidth:0.5, borderColor:'purple'}}></View>
-      <ScrollView contentContainerStyle={{ padding: 20 }} style={{}}>
+      {/* <Text style={{ marginLeft: 20, fontWeight: '600', fontSize: fontSize.lg , }}>Recent Post</Text>
+      <View style={{ width, borderWidth:0.5, borderColor:'purple'}}></View> */}
 
+      {/* <ScrollView contentContainerStyle={{ padding: 20 }} style={{}}>
         <UserProductCard />
-
-      </ScrollView>
+      </ScrollView> */}
       {/* <View>
         <Text>Recent Post</Text>
         
@@ -87,7 +79,7 @@ const Profile = () => {
   )
 }
 
-export default Profile
+export default EditProfile
 
 const styles = StyleSheet.create({
   container: {

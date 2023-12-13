@@ -8,6 +8,11 @@ export const userApiSlice = apiSlice.injectEndpoints({
         getMe:builder.query<User,  void>({
             query: ()=>`api/user/profile/${authService.getUserId()}`
         }),
+
+        get_profile:builder.query<User,  void>({
+            query: ()=>`api/user/profile/${authService.getUserId()}`
+        }),
+
         getAllUsers:builder.query<AuthResponse[],  void>({
             query: (userId)=>`api/user/all`
         }),

@@ -10,6 +10,8 @@ export interface LoginValues {
     email: string;
     password: string;
 }
+
+
 export interface RegisterValues {
     first_name: string;
     last_name: string;
@@ -40,6 +42,9 @@ export interface Product{
 export interface SingleProductType{
     product:Product;
     product_owner:User
+}
+export interface UserProducts{
+    product:Product[]
 }
 
 
