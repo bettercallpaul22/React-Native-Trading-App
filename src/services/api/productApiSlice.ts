@@ -16,7 +16,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
             })
         }),
 
-        get_user_products: builder.query<UserProducts, { owner_id: string }>({
+        get_user_products: builder.query<Product[], { owner_id: string }>({
             query: ({ owner_id }) => ({
                 url: `api/product/${owner_id}`,
             })

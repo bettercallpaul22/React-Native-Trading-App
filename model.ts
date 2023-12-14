@@ -49,16 +49,16 @@ export interface UserProducts{
 
 
 export type User = {
-    _id: String,
-    firstName: String,
-    lastName: String,
-    userName: String,
-    email: String,
-    password: String,
-    avatar: String,
-    city: String,
-    state: String,
-    country: String,
-    mobile_number: String,
+    _id: string,
+    firstName: string,
+    lastName: string,
+    userName: string,
+    email: string,
+    password: string,
+    avatar: string,
+    city: string,
+    state: string,
+    country: string,
+    mobile_number: string,
     product:Product,
 }

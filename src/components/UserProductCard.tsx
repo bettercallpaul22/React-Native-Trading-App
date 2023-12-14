@@ -21,8 +21,9 @@ import { Product, User } from '../../model'
 import { selectCurrentToken, selectCurrentUser } from '../services/features/userSlice'
 
 interface Data{
-    data:Product[]
+    data:Product[];
 }
+
 const UserProductCard:React.FC<Data> = ({data}) => {
     const current_user:User = useSelector(selectCurrentUser)
     const [refreshing, setRefreshing] = useState(false);
@@ -34,33 +35,33 @@ const UserProductCard:React.FC<Data> = ({data}) => {
     const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
 
 
-    const onRefresh = useCallback(() => {
-        setRefreshing(lasyLoading);
-        fetch_products()
-        setTimeout(() => {
-            setRefreshing(lasyLoading);
-        }, 5000);
-    }, []);
+    // const onRefresh = useCallback(() => {
+    //     setRefreshing(lasyLoading);
+    //     fetch_products()
+    //     setTimeout(() => {
+    //         setRefreshing(lasyLoading);
+    //     }, 5000);
+    // }, []);
     
-    if (isLoading) return <View
-        style={{
-            flex: 1,
-            alignItems: 'center',
-            justifyContent: 'center'
+    // if (isLoading) return <View
+    //     style={{
+    //         flex: 1,
+    //         alignItems: 'center',
+    //         justifyContent: 'center'
 
-        }}
-    >
-        <ActivityIndicator size="large" color={"purple"} />
-    </View>
+    //     }}
+    // >
+    //     <ActivityIndicator size="large" color={"purple"} />
+    // </View>
 
-    if (isError) return <ScrollView
-        style={{ flex: 1, }}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-    >
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Text>Something went wrong please pull down to refresh</Text>
-        </View>
-    </ScrollView>
+    // if (isError) return <ScrollView
+    //     style={{ flex: 1, }}
+    //     refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+    // >
+    //     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    //         <Text>Something went wrong please pull down to refresh</Text>
+    //     </View>
+    // </ScrollView>
 
     // const filter_product = product_data.filter((product) => product.owner_id === current_user._id)
    
@@ -69,7 +70,7 @@ const UserProductCard:React.FC<Data> = ({data}) => {
         <View style={{ backgroundColor: color.NEW_BACKGROUND_COLOR, }}>
 
             <Animated.FlatList
-                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+                // refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                 onScroll={Animated.event(
                     [{ nativeEvent: { contentOffset: { y: scrollY } } }],
                     { useNativeDriver: true },

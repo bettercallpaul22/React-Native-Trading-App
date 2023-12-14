@@ -11,25 +11,25 @@ import { selectCurrentUser } from '../services/features/userSlice';
 import { User } from '../../model';
 import UserProductCard from '../components/UserProductCard';
 import { useGet_user_productsQuery } from '../services/api/productApiSlice';
+import Loading from '../components/Loading';
 
 const { width } = Dimensions.get('screen')
 
 const SellerProfile = () => {
   const user: User = useSelector(selectCurrentUser)
   const owner_id = user._id as string
-  const { isLoading, data } = useGet_user_productsQuery({owner_id})
-
+  const { isLoading, data, isError } = useGet_user_productsQuery({ owner_id })
   const onRefresh = useCallback(() => {
     // setRefreshing(lasyLoading);
     // fetch_products()
     setTimeout(() => {
-        // setRefreshing(lasyLoading);
+      // setRefreshing(lasyLoading);
     }, 5000);
-}, []);
+  }, []);
 
 
 
-
+  const load = true
 
 
 
@@ -50,7 +50,7 @@ const SellerProfile = () => {
         <Text style={{ fontSize: fontSize.xm, fontWeight: '600', letterSpacing: 1 }}>EDIT</Text>
       </TouchableOpacity> */}
 
-     { <View style={styles.follow_container} >
+      {<View style={styles.follow_container} >
         <TouchableOpacity style={{ backgroundColor: 'rgb(216,191,216)', padding: 5, borderRadius: 10 }}>
           <Text style={{ fontSize: 12, fontWeight: '600', letterSpacing: 1 }}>FOLLOWING</Text>
         </TouchableOpacity>
@@ -87,17 +87,16 @@ const SellerProfile = () => {
           "Try it Yourself" editor, you can edit and test each example yourself!
         </Text>
       </View>
-      <Text style={{ marginLeft: 20, fontWeight: '600', fontSize: fontSize.lg , }}>Recent Post</Text>
-      <View style={{ width, borderWidth:0.5, borderColor:'purple'}}></View>
+      <Text style={{ marginLeft: 20, fontWeight: '600', fontSize: fontSize.lg, }}>Recent Post</Text>
+      <View style={{ width, borderWidth: 0.5, borderColor: 'purple' }}></View>
       <ScrollView contentContainerStyle={{ padding: 20 }} style={{}}>
-
-        <UserProductCard data={data.product} />
+        {
+          isLoading ? <Loading message='Loading...' />
+            : isError ? <Loading message='Error Getting Posts, Pull down to retry' />
+              : <UserProductCard data={data} />
+        }
 
       </ScrollView>
-      {/* <View>
-        <Text>Recent Post</Text>
-        
-      </View> */}
     </View>
   )
 }
