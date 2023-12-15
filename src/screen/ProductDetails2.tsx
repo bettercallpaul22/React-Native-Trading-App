@@ -148,7 +148,7 @@ const ProductDetails2 = () => {
       >
         <TouchableOpacity
           onPress={() => {
-            navigator.navigate('SellerProfile')
+            navigator.navigate('SellerProfile', { data: product_data?.product_owner })
           }}
           style={{
             height: 50, width: 50, backgroundColor: 'purple',
@@ -156,15 +156,22 @@ const ProductDetails2 = () => {
             justifyContent: 'center',
             borderRadius: 50
           }}>
-          <Image
+            {!product_data?.product_owner.avatar ?
+            <Image
             style={{ height: '95%', width: '95%', borderRadius: 50 }}
-            source={require('../../assets/images/profile.png')}
-          />
+              source={require('../../assets/images/profile.png')}
+            />
+            :
+            <Image
+            style={{ height: '95%', width: '95%', borderRadius: 50 }}
+              source={{uri:product_data?.product_owner.avatar}}
+            />
+          }
         </TouchableOpacity>
 
         <View>
-          <Text style={{ fontWeight: '600', fontSize: 12 }}>{product_owner.firstName} {product_owner.lastName}</Text>
-          <Text style={{ fontWeight: '600', fontSize: 12, color: 'gray' }}>{product_owner.city} {product_owner.state}</Text>
+          <Text style={{ fontWeight: '600', fontSize: 12 }}>{product_owner?.firstName} {product_owner?.lastName}</Text>
+          <Text style={{ fontWeight: '600', fontSize: 12, color: 'gray' }}>{product_owner?.city} {product_owner?.state}</Text>
         </View>
 
         <TouchableOpacity style={{

@@ -11,12 +11,15 @@ import { selectCurrentUser } from '../services/features/userSlice';
 import { User } from '../../model';
 import UserProductCard from '../components/UserProductCard';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { useGet_user_productsQuery } from '../services/api/productApiSlice';
 
 const { width } = Dimensions.get('screen')
 
 const Profile = () => {
+
   const navigator = useNavigation<NavigationProp<any>>()
   const user: User = useSelector(selectCurrentUser)
+  const { isLoading, data, isError } = useGet_user_productsQuery({ owner_id: user?._id })
 
   return (
     <View style={styles.container}>
@@ -30,12 +33,12 @@ const Profile = () => {
         <Text style={{ fontSize: fontSize.xm, fontWeight: '600', letterSpacing: 1 }}>EDIT</Text>
       </TouchableOpacity> */}
 
-     { <View style={styles.follow_container} >
-        <TouchableOpacity 
-        style={{ backgroundColor: 'rgb(216,191,216)', padding: 5, borderRadius: 10 }}
-        onPress={()=>{
-          navigator.navigate('EditProfile')
-        }}
+      {<View style={styles.follow_container} >
+        <TouchableOpacity
+          style={{ backgroundColor: 'rgb(216,191,216)', padding: 5, borderRadius: 10 }}
+          onPress={() => {
+            navigator.navigate('EditProfile')
+          }}
         >
           <Text style={{ fontSize: 12, fontWeight: '600', letterSpacing: 1 }}>EDIT PROFILE</Text>
         </TouchableOpacity>
@@ -44,16 +47,23 @@ const Profile = () => {
 
       <View style={{ alignItems: 'center', gap: 5, padding: 20 }}>
         <View style={styles.image_container}>
-          <Image
-            style={styles.image}
-            source={require('../../assets/images/profile.png')}
-          />
+          {!user?.avatar ?
+            <Image
+              style={styles.image}
+              source={require('../../assets/images/profile.png')}
+            />
+            :
+            <Image
+              style={styles.image}
+              source={{uri:user?.avatar}}
+            />
+          }
         </View>
-        <Text style={styles.profile_name}>{user.firstName.toUpperCase()} {user.lastName.toUpperCase()}</Text>
+        <Text style={styles.profile_name}>{user?.firstName.toUpperCase()} {user?.lastName.toUpperCase()}</Text>
 
         <View style={styles.location_container}>
           <Entypo name="location-pin" size={24} color="gray" />
-          <Text style={{ fontWeight: '600', color: 'gray' }}>{user.city} {user.state} {user.country}</Text>
+          <Text style={{ fontWeight: '600', color: 'gray' }}>{user?.city} {user?.state} {user?.country}</Text>
         </View>
         <View style={{ flexDirection: 'row', gap: 20, width: '100%', }}>
 
@@ -66,17 +76,13 @@ const Profile = () => {
             <Text style={{ fontWeight: '600', color: 'gray' }}>Followers</Text>
           </View>
         </View>
-        <Text style={styles.bio}>
-          In this HTML tutorial,
-          you will find more than 200 examples. With our online
-          "Try it Yourself" editor, you can edit and test each example yourself!
-        </Text>
+        <Text style={styles.bio}>{user?.bio}</Text>
       </View>
-      <Text style={{ marginLeft: 20, fontWeight: '600', fontSize: fontSize.lg , }}>Recent Post</Text>
-      <View style={{ width, borderWidth:0.5, borderColor:'purple'}}></View>
+      <Text style={{ marginLeft: 20, fontWeight: '600', fontSize: fontSize.lg, }}>Recent Post</Text>
+      <View style={{ width, borderWidth: 0.5, borderColor: 'purple' }}></View>
       <ScrollView contentContainerStyle={{ padding: 20 }} style={{}}>
 
-        <UserProductCard />
+        <UserProductCard data={data} />
 
       </ScrollView>
       {/* <View>

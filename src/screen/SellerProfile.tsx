@@ -12,13 +12,15 @@ import { User } from '../../model';
 import UserProductCard from '../components/UserProductCard';
 import { useGet_user_productsQuery } from '../services/api/productApiSlice';
 import Loading from '../components/Loading';
+import { useRoute } from '@react-navigation/native';
 
 const { width } = Dimensions.get('screen')
 
 const SellerProfile = () => {
+  const { params } = useRoute()
+  const seller_profile: User = params['data']
   const user: User = useSelector(selectCurrentUser)
-  const owner_id = user._id as string
-  const { isLoading, data, isError } = useGet_user_productsQuery({ owner_id })
+  const { isLoading, data, isError } = useGet_user_productsQuery({ owner_id:seller_profile._id  })
   const onRefresh = useCallback(() => {
     // setRefreshing(lasyLoading);
     // fetch_products()
@@ -26,11 +28,6 @@ const SellerProfile = () => {
       // setRefreshing(lasyLoading);
     }, 5000);
   }, []);
-
-
-
-  const load = true
-
 
 
 
@@ -59,16 +56,23 @@ const SellerProfile = () => {
 
       <View style={{ alignItems: 'center', gap: 5, padding: 20 }}>
         <View style={styles.image_container}>
-          <Image
-            style={styles.image}
-            source={require('../../assets/images/profile.png')}
-          />
+        {!seller_profile?.avatar ?
+            <Image
+              style={styles.image}
+              source={require('../../assets/images/profile.png')}
+            />
+            :
+            <Image
+              style={styles.image}
+              source={{uri:seller_profile?.avatar}}
+            />
+          }
         </View>
-        <Text style={styles.profile_name}>{user.firstName.toUpperCase()} {user.lastName.toUpperCase()}</Text>
+        <Text style={styles.profile_name}>{seller_profile?.firstName.toUpperCase()} {seller_profile?.lastName.toUpperCase()}</Text>
 
         <View style={styles.location_container}>
           <Entypo name="location-pin" size={24} color="gray" />
-          <Text style={{ fontWeight: '600', color: 'gray' }}>{user.city} {user.state} {user.country}</Text>
+          <Text style={{ fontWeight: '600', color: 'gray' }}>{seller_profile?.city} {seller_profile?.state} {seller_profile?.country}</Text>
         </View>
         <View style={{ flexDirection: 'row', gap: 20, width: '100%', }}>
 
@@ -81,11 +85,7 @@ const SellerProfile = () => {
             <Text style={{ fontWeight: '600', color: 'gray' }}>Followers</Text>
           </View>
         </View>
-        <Text style={styles.bio}>
-          In this HTML tutorial,
-          you will find more than 200 examples. With our online
-          "Try it Yourself" editor, you can edit and test each example yourself!
-        </Text>
+        <Text style={styles.bio}>{seller_profile?.bio}</Text>
       </View>
       <Text style={{ marginLeft: 20, fontWeight: '600', fontSize: fontSize.lg, }}>Recent Post</Text>
       <View style={{ width, borderWidth: 0.5, borderColor: 'purple' }}></View>

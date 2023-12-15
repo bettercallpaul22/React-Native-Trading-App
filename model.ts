@@ -59,6 +59,9 @@ export type User = {
     city: string,
     state: string,
     country: string,
-    mobile_number: string,
+    credit: number,
+    bio: string,
+    gender: string,
+    verified: boolean,
     product:Product,
 }

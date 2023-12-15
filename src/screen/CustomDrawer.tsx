@@ -21,7 +21,7 @@ const CustomDrawer = (props) => {
     // console.log("user", user === null)
 
 
-// console.log("persist", persistor.purge())
+    // console.log("persist", persistor.purge())
 
     return (
         <DrawerContentScrollView {...props} style={styles.container}
@@ -32,10 +32,18 @@ const CustomDrawer = (props) => {
             <View style={styles.profile_header}>
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
                     <View style={styles.image_frame}>
-                        <Image
+                        {!user?.avatar ?
+                            <Image
                             style={{ height: 80, width: 80, borderRadius: 100 }}
-                            source={require('../../assets/images/profile.png')}
-                        />
+                                source={require('../../assets/images/profile.png')}
+                            />
+                            :
+                            <Image
+                            style={{ height: 80, width: 80, borderRadius: 100 }}
+                                source={{ uri: user?.avatar }}
+                            />
+                        }
+                       
                     </View>
                 </View>
 
@@ -60,26 +68,26 @@ const CustomDrawer = (props) => {
             </View>
             <DrawerItemList {...props} />
             <TouchableOpacity
-                onPress={() => { 
+                onPress={() => {
                     authService.clearUser()
                     dispatch(logOut())
                     // persistor.purge().then((res)=>console.log('persist purge res', res))
                     // .catch((err)=>console.log('err', err))
-                 }}
-                style={{ 
-                    backgroundColor:'rgb(216,191,216)',
-                     position: 'absolute',
-                      bottom: 20,
-                       left: 20,
-                       flexDirection:'row',
-                       gap:10,
-                       alignItems:'center',
-                       borderRadius:5,
-                       padding:5
-                     }}
+                }}
+                style={{
+                    backgroundColor: 'rgb(216,191,216)',
+                    position: 'absolute',
+                    bottom: 20,
+                    left: 20,
+                    flexDirection: 'row',
+                    gap: 10,
+                    alignItems: 'center',
+                    borderRadius: 5,
+                    padding: 5
+                }}
             >
                 <Ionicons name="exit-outline" size={24} color="black" />
-                <Text style={{ fontSize: fontSize.sm, fontWeight:'600', letterSpacing:2 }}>LOGOUT</Text>
+                <Text style={{ fontSize: fontSize.sm, fontWeight: '600', letterSpacing: 2 }}>LOGOUT</Text>
             </TouchableOpacity>
         </DrawerContentScrollView>
     )

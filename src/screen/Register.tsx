@@ -58,7 +58,7 @@ const Register: React.FC = () => {
     const authService = new AuthService()
     const dispatch = useDispatch()
     const navigator = useNavigation<NavigationProp<any>>()
-    const [signin, { isLoading }] = useRegisterMutation()
+    const [register, { isLoading }] = useRegisterMutation()
     const [serverErr, setServerErr] = useState('')
     const [location, setLocation] = useState(null);
     const [city, setCity] = useState('');
@@ -111,7 +111,15 @@ const Register: React.FC = () => {
         if (validate_input(errors)) return
         const { firstName, lastName, email, password } = value
         try {
-            const res: AuthResponse = await signin({ firstName, lastName, email, password, city, state, country }).unwrap()
+            const res: AuthResponse = await register({
+                 firstName, 
+                 lastName, 
+                 email, 
+                 password, 
+                 city, 
+                 state, 
+                 country, 
+                }).unwrap()
             if (res.success) {
                 dispatch(setCredientials(res))
                 authService.setUser(res.user)
@@ -277,7 +285,7 @@ const Register: React.FC = () => {
 
                         <View style={styles.btn_wrapper} >
                             <CustoButton
-                                // disabled={!values.firstName || !values.lastName || !values.email || !values.password || !values.comfirmPassword}
+                            disabled={isLoading}
                                 title={isLoading ? 'Submitting...' : 'Register'}
                                 onPress={() => {
                                     handleSubmit()

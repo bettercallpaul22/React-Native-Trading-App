@@ -193,7 +193,7 @@ const Login: React.FC = () => {
 
                         <View style={styles.btn_wrapper} >
                             <CustoButton
-                                // disabled={!values.firstName || !values.lastName || !values.email || !values.password || !values.comfirmPassword}
+                            disabled={isLoading}
                                 title={isLoading ? 'Submitting...' : 'login'}
                                 onPress={() => {
                                     handleSubmit()

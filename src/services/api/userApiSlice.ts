@@ -3,6 +3,10 @@ import { AuthService } from "../authServices";
 import { apiSlice } from "../baseApi";
 const authService = new AuthService()
 
+// const _id = await authService.getUserId() 
+
+
+
 export const userApiSlice = apiSlice.injectEndpoints({
     endpoints:(builder) => ({
         getMe:builder.query<User,  void>({
@@ -19,7 +23,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
 
         update:builder.mutation({
             query: (body) =>({
-                url:`api/user/update/${authService.getUserId()}`,
+                url:`api/user/update/657c41d8575a2dd78b115240`,
                 method:"PUT",
                 body,
                      

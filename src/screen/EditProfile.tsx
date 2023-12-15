@@ -6,23 +6,29 @@ import { Entypo } from '@expo/vector-icons';
 import ProductCardList from '../components/ProductCardList';
 import { ScrollView } from 'react-native-virtualized-view'
 import { FontAwesome } from '@expo/vector-icons';
-import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../services/features/userSlice';
-import { User } from '../../model';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectCurrentUser, setCredientials } from '../services/features/userSlice';
+import { AuthResponse, User } from '../../model';
 import UserProductCard from '../components/UserProductCard';
 import { TextInput } from 'react-native-gesture-handler';
 import * as ImagePicker from 'expo-image-picker'
 import { manipulateAsync, ActionResize, SaveFormat } from 'expo-image-manipulator';
 import CustoButton from '../components/CustoButton';
+import { useUpdateMutation } from '../services/api/userApiSlice';
+import { AuthService } from '../services/authServices';
 
 const { width } = Dimensions.get('screen')
 
 const EditProfile = () => {
+  const authService = new AuthService()
+  const dispatch = useDispatch()
   const user: User = useSelector(selectCurrentUser)
-  const [bio, seTbio] = useState(user.lastName)
+  const [bio, seTbio] = useState(user.bio)
   const [image, setImage] = useState(user.avatar);
 
 
+
+const [update, { isLoading, data} ] = useUpdateMutation()
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -41,8 +47,22 @@ const EditProfile = () => {
 
 
 
-
-
+const handleUpdate = async() =>{
+  try {
+    const res:AuthResponse = await update({ avatar:image, bio}).unwrap()
+    // console.log("update response",res.success)
+    if (res.success) {
+      dispatch(setCredientials(res))
+      authService.setUser(res.user)
+      authService.setUserToken(res.token)
+      authService.setUserId(res._id)
+  }
+    
+  } catch (error) {
+    console.log("update error response", error)
+    
+  }
+}
 
 
 
@@ -111,7 +131,7 @@ const EditProfile = () => {
           }}
           cursorColor={'gray'}
           multiline
-          maxLength={160}
+          maxLength={165}
           inputMode="text"
           value={bio}
         >
@@ -122,10 +142,11 @@ const EditProfile = () => {
           style={{ width: '100%', position: 'absolute', bottom: 20, paddingHorizontal:20 }}
         >
           <Button
-            title='Save'
+          disabled={isLoading}
+            title={isLoading? 'Updating':'Save'}
             color={'purple'}
             onPress={() => {
-
+              handleUpdate()
             }}
           />
         </View>
