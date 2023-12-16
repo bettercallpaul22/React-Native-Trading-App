@@ -5,7 +5,8 @@ import {
     ScrollView,
     StyleSheet,
     TouchableOpacity,
-    RefreshControl
+    RefreshControl,
+    StatusBar
 } from "react-native";
 import Animated, {
     Easing,
@@ -170,6 +171,8 @@ const Register: React.FC = () => {
                     refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
 
                 >
+                <StatusBar backgroundColor={color.NEW_BACKGROUND_COLOR} />
+
                     <View style={styles.image_light_container}>
                         <Animated.Image
                             entering={FadeInUp.delay(200).duration(1000).springify().damping(3)}

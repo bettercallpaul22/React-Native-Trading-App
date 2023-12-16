@@ -1,4 +1,4 @@
-import { Dimensions, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Dimensions, Image, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useCallback } from 'react'
 import { color } from '../../assets/misc/colors'
 import { fontSize } from '../../assets/misc/others'
@@ -37,6 +37,8 @@ const SellerProfile = () => {
 
   return (
     <View style={styles.container}>
+                <StatusBar backgroundColor={color.NEW_BACKGROUND_COLOR} barStyle="dark-content" />
+
       {/* <TouchableOpacity
         onPress={() => {
 

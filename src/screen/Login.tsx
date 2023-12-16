@@ -8,6 +8,7 @@ import {
     Button,
     BackHandler,
     Alert,
+    StatusBar,
 } from "react-native";
 import Animated, {
     Easing,
@@ -128,6 +129,8 @@ const Login: React.FC = () => {
         >
             {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
                 <ScrollView style={[styles.main,]}>
+                <StatusBar backgroundColor={color.NEW_BACKGROUND_COLOR} />
+
                     <View style={styles.image_light_container}>
                         <Animated.Image
                             entering={FadeInUp.delay(200).duration(1000).springify().damping(3)}
