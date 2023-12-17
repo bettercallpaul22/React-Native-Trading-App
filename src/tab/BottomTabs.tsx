@@ -17,13 +17,15 @@ const Tab = createMaterialBottomTabNavigator();
 const BottomTabs = () => {
   return (
 
-      <Tab.Navigator>
-        <Tab.Screen name="Home" component={HomeScreen}
+      <Tab.Navigator barStyle={{backgroundColor:color.NEW_BACKGROUND_COLOR, borderColor:'purple', borderWidth:0.5 }}>
+        <Tab.Screen  name="Home" component={HomeScreen}
           options={{
             tabBarIcon: ({ focused }) => (
               <MaterialCommunityIcons name={focused ? "home-minus" : "home-minus-outline"} size={24} color="purple" />
-              )
+              ),
+              
             }}
+
         />
         <Tab.Screen name="List Items" component={ListItem}
           options={{

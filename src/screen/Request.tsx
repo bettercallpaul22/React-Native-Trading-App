@@ -8,6 +8,7 @@ import { color } from '../../assets/misc/colors';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import RequestRecieved from './RequestRecieved';
 import RequestSent from './RequestSent';
+import { Header } from '../components/Header';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -16,25 +17,29 @@ const Tab = createMaterialTopTabNavigator();
 
 const Request = () => {
     return (
-        //   <View style={{backgroundColor:'teal'}}>
-        <Tab.Navigator
-            keyboardDismissMode='on-drag'
-            backBehavior='none'
-            tabBarPosition='top'
-            screenOptions={{
-                tabBarActiveTintColor: 'purple',
-                tabBarInactiveTintColor: 'black',
-                tabBarContentContainerStyle: { backgroundColor: color.NEW_BACKGROUND_COLOR },
-                animationEnabled: true,
-                // tabBarBounces:true
-                tabBarPressColor: 'rgb(216,191,216)'
-            }}
-            sceneContainerStyle={{ backgroundColor: 'teal' }}
-        >
-            <Tab.Screen name="Receive" component={RequestRecieved} />
-            <Tab.Screen name="Sent" component={RequestSent} />
-        </Tab.Navigator>
-        // </View>
+        <View style={{backgroundColor:color.NEW_BACKGROUND_COLOR, flex:1, }}>
+        <Header title='Request'/>
+            <Tab.Navigator
+            style={{paddingTop:20}}
+                keyboardDismissMode='on-drag'
+                backBehavior='none'
+                tabBarPosition='top'
+
+                screenOptions={{
+                    tabBarActiveTintColor: 'purple',
+                    tabBarInactiveTintColor: 'black',
+                    tabBarContentContainerStyle: { backgroundColor: color.NEW_BACKGROUND_COLOR },
+                    animationEnabled: true,
+                    // tabBarBounces:true
+                    tabBarPressColor: 'rgb(216,191,216)',
+
+                }}
+                sceneContainerStyle={{ backgroundColor: 'teal' }}
+            >
+                <Tab.Screen name="Receive" component={RequestRecieved} />
+                <Tab.Screen name="Sent" component={RequestSent} />
+            </Tab.Navigator>
+        </View>
     )
 }
 

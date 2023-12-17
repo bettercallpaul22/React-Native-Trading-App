@@ -12,19 +12,19 @@ import { User } from '../../model';
 import UserProductCard from '../components/UserProductCard';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useGet_user_productsQuery } from '../services/api/productApiSlice';
+import { ProfileHeader } from '../components/ProfileHeader';
 
 const { width } = Dimensions.get('screen')
 
 const Profile = () => {
-
   const navigator = useNavigation<NavigationProp<any>>()
   const user: User = useSelector(selectCurrentUser)
   const { isLoading, data, isError } = useGet_user_productsQuery({ owner_id: user?._id })
 
   return (
     <View style={styles.container}>
-                <StatusBar backgroundColor={color.NEW_BACKGROUND_COLOR} barStyle="dark-content" />
-
+      <StatusBar backgroundColor={color.NEW_BACKGROUND_COLOR} barStyle="dark-content" />
+      <ProfileHeader title='Profile' />
       {/* <TouchableOpacity
         onPress={() => {
 
@@ -57,7 +57,7 @@ const Profile = () => {
             :
             <Image
               style={styles.image}
-              source={{uri:user?.avatar}}
+              source={{ uri: user?.avatar }}
             />
           }
         </View>
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
   follow_container: {
 
     position: 'absolute',
-    top: 20,
+    top: 80,
     right: 20,
     // flexDirection: 'column',
     gap: 10,

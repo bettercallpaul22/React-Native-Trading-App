@@ -26,6 +26,7 @@ import { fontSize } from '../../assets/misc/others';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../services/features/userSlice';
 import { User } from '../../model';
+import { Header } from '../components/Header';
 
 const { width } = Dimensions.get('window');
 interface ImageType {
@@ -132,12 +133,14 @@ const ListItem = () => {
             }}
         >
             {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
-                <SafeAreaView style={styles.saveAreaViewContainer}>
-                    <StatusBar backgroundColor="#FFF" barStyle="dark-content" />
-                    <ScrollView style={styles.viewContainer}>
-                        {/* <Header title='ListItem' /> */}
-
-                        <View style={{ paddingHorizontal: 20, width: '100%', paddingBottom: 50 }}>
+                <View style={styles.saveAreaViewContainer}>
+                    <View style={styles.viewContainer}>
+                    <StatusBar backgroundColor={color.NEW_BACKGROUND_COLOR} barStyle="dark-content" />
+                    <Header title='List Your Item'/>
+                <ScrollView style={{paddingHorizontal:20}}>
+                        <View 
+                        style={{ paddingTop: 20, width: '100%', paddingBottom: 50, }}
+                        >
                             <View style={errors.item_name && touched.item_name ? styles.input_wrapper_error : styles.input_wrapper}>
                                 <TextInput
                                     style={styles.input}
@@ -279,8 +282,9 @@ const ListItem = () => {
                                 }}
                             />
                         </View>
+                        </ScrollView>
 
-                    </ScrollView>
+                    </View>
 
                     <Modal
                         animationType="fade"
@@ -304,7 +308,7 @@ const ListItem = () => {
                             </View>
                         </View>
                     </Modal>
-                </SafeAreaView>
+                </View>
             )}
         </Formik>
     );
@@ -312,8 +316,18 @@ const ListItem = () => {
 export default ListItem
 const styles = StyleSheet.create({
 
-    saveAreaViewContainer: { flex: 1, backgroundColor: '#FFF', },
-    viewContainer: { flex: 1, width, backgroundColor: color.NEW_BACKGROUND_COLOR, paddingVertical: 20 },
+    saveAreaViewContainer: { 
+        flex: 1,
+         backgroundColor: color.NEW_BACKGROUND_COLOR,
+         },
+
+    viewContainer: { 
+        flex: 1, width,
+         backgroundColor: color.NEW_BACKGROUND_COLOR,
+        //  paddingLeft:20,
+        //  paddingLeft:20,
+        // paddingHorizontal:20
+        },
 
 
 

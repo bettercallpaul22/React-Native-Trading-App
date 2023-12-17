@@ -3,15 +3,14 @@ import { color } from "../../assets/misc/colors";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../services/features/userSlice";
 import { User } from "../../model";
-import { useState } from "react";
-import Drawer from "./Drawer";
+import { Ionicons } from '@expo/vector-icons';
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 
 
 interface HeaderProps {
     title: string;
 }
-export const Header: React.FC<HeaderProps> = ({ title }) => {
+export const ProfileHeader: React.FC<HeaderProps> = ({ title }) => {
     const navigator = useNavigation<any>()
 
 
@@ -19,13 +18,8 @@ export const Header: React.FC<HeaderProps> = ({ title }) => {
 
     return (
         <View style={styles.header}>
-            <TouchableOpacity onPress={()=>navigator.openDrawer()}>
-            {/* <TouchableOpacity onPress={()=>setopenDrawer(!openDrawer)}> */}
-                <Image 
-                    resizeMode="contain"
-                    style={{ height: 35, width: 35, borderRadius:50 }}
-                    source={{uri:user?.avatar}}
-                />
+            <TouchableOpacity onPress={()=>navigator.goBack()}>
+            <Ionicons name="arrow-back-sharp" size={28} color="black" />
             </TouchableOpacity>
             <Text style={styles.headerTitle}>{title}</Text>
             <View style={{height:50, width:50}}></View>
@@ -47,7 +41,7 @@ const styles = StyleSheet.create({
         shadowColor: "#000",
         shadowOffset: { height: 10, width: 0 },
         height: 50,
-        // marginBottom: 20,
+        marginBottom: 20,
         borderRadius: 5,
         shadowOpacity: 1,
         shadowRadius: 20

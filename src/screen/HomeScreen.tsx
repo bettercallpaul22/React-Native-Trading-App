@@ -11,8 +11,8 @@
         RefreshControl,
         Alert,
         BackHandler,
-        StatusBar,
-        SafeAreaView
+        SafeAreaView, 
+        StatusBar
     } from 'react-native'
     import React, { useCallback, useRef, useState } from 'react'
     import Animated, { interpolate } from 'react-native-reanimated'
@@ -27,6 +27,7 @@
     import { useDispatch, useSelector } from 'react-redux'
     import { Product } from '../../model'
     import { selectCurrentToken } from '../services/features/userSlice'
+import { Header } from '../components/Header'
     
     const slider_width = width * 0.7
     
@@ -34,7 +35,6 @@
     
     
     const HomeScreen = () => {
-        console.log("home page")
         const { isLoading, data, isError, error } = useGet_all_productsQuery()
         const navigator = useNavigation<NavigationProp<any>>()
         const token = useSelector(selectCurrentToken)
@@ -104,6 +104,7 @@
     
         return (
             <SafeAreaView style={{ backgroundColor: color.NEW_BACKGROUND_COLOR, flex: 1 }}>
+                <Header title='Home'/>
                 <StatusBar backgroundColor={color.NEW_BACKGROUND_COLOR} barStyle="dark-content" />
     
                 <Animated.FlatList

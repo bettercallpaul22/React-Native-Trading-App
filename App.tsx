@@ -28,23 +28,23 @@ const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator()
 
 const DrawerNavigator = () => {
-  return( 
-  <Drawer.Navigator drawerContent={(props: any) => (<CustomDrawer {...props} />)}
-    screenOptions={{
-      headerStyle: styles.header,
-      headerTitleStyle: styles.headerTitle,
-      headerTitleAlign: 'center',
-      headerShown: true,
-      drawerActiveTintColor: 'purple',
+  return (
+    <Drawer.Navigator drawerContent={(props: any) => (<CustomDrawer {...props} />)}
+      screenOptions={{
+        headerStyle: styles.header,
+        headerTitleStyle: styles.headerTitle,
+        headerTitleAlign: 'center',
+        headerShown: false,
+        drawerActiveTintColor: 'purple',
 
-    }}
-  >
+      }}
+    >
 
-    {/* <Drawer.Screen options={{ headerShown: true }} name='Home' component={ButtomTabs} /> */}
-    <Drawer.Screen options={{ headerShown: true }} name='Trade' component={BottomTabs} />
-    <Drawer.Screen options={{ headerShown: true }} name='Profile' component={Profile} />
-  </Drawer.Navigator>
-)
+      {/* <Drawer.Screen options={{ headerShown: true }} name='Home' component={ButtomTabs} /> */}
+      <Drawer.Screen options={{ headerShown: false }} name='HomePage' component={BottomTabs} />
+      <Drawer.Screen options={{ headerShown: false,  }} name='Profile' component={Profile} />
+    </Drawer.Navigator>
+  )
 }
 
 
@@ -90,7 +90,7 @@ const App = () => {
           }
           persistor={persistor}
         >
-          
+
           <NavigationContainer>
             <Stack.Navigator screenOptions={{
               headerStyle: styles.header,
@@ -98,8 +98,8 @@ const App = () => {
               headerTitleAlign: 'center',
               headerShown: false,
             }}>
-              <Stack.Screen name='DrawerNavigator' component={DrawerNavigator} />
-    {/* <Stack.Screen options={{ headerShown: true }} name='Trade' component={BottomTabs} /> */}
+              <Stack.Screen name='DrawerNavigator' component={DrawerNavigator} options={{ headerShown: false, }} />
+              <Stack.Screen options={{ headerShown: true }} name='Trade' component={BottomTabs} />
 
               <Stack.Screen name='Register' component={Register} options={{ headerShown: true }} />
               <Stack.Screen name='Login' component={Login} options={{ headerShown: true, headerBackVisible: false }} />
