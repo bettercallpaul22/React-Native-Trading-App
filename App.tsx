@@ -7,8 +7,12 @@ import Register from './src/screen/Register';
 import Profile from './src/screen/Profile';
 import BottomTabs from './src/tab/BottomTabs';
 import ProductDetails2 from './src/screen/ProductDetails2';
+import EditProduct from './src/screen/EditProduct';
+import TradeListItem from './src/screen/TradeListItem';
 import SellerProfile from './src/screen/SellerProfile';
+import BottomModal from './src/components/BottomModal';
 import EditProfile from './src/screen/EditProfile';
+import RequestReceivedDetails from './src/screen/RequestReceivedDetails';
 import { Provider, useSelector } from 'react-redux';
 import { persistor, store } from './src/services/store';
 import { PaperProvider } from 'react-native-paper';
@@ -41,6 +45,7 @@ const DrawerNavigator = () => {
     >
 
       {/* <Drawer.Screen options={{ headerShown: true }} name='Home' component={ButtomTabs} /> */}
+      {/* <Drawer.Screen options={{ headerShown: false }} name='BottomModal' component={BottomModal} /> */}
       <Drawer.Screen options={{ headerShown: false }} name='HomePage' component={BottomTabs} />
       <Drawer.Screen options={{ headerShown: false,  }} name='Profile' component={Profile} />
     </Drawer.Navigator>
@@ -104,8 +109,11 @@ const App = () => {
               <Stack.Screen name='Register' component={Register} options={{ headerShown: true }} />
               <Stack.Screen name='Login' component={Login} options={{ headerShown: true, headerBackVisible: false }} />
               <Stack.Screen name='ProductDetails2' component={ProductDetails2} options={{ headerShown: true }} />
+              <Stack.Screen name='EditProduct' component={EditProduct} options={{ headerShown: true }} />
+              <Stack.Screen name='TradeListItem' component={TradeListItem} options={{ headerShown: true }} />
               <Stack.Screen name='SellerProfile' component={SellerProfile} options={{ headerShown: true }} />
               <Stack.Screen name='EditProfile' component={EditProfile} options={{ headerShown: true }} />
+              <Stack.Screen name='RequestReceivedDetails' component={RequestReceivedDetails} options={{ headerShown: true }} />
 
             </Stack.Navigator>
           </NavigationContainer>

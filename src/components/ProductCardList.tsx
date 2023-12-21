@@ -17,7 +17,7 @@ const SPACING = 20
 const CARD_HEIGHT = 150
 import { Entypo } from '@expo/vector-icons';
 import { useDispatch } from 'react-redux'
-
+ 
 
 const ProductCardList = () => {
     const [refreshing, setRefreshing] = useState(false);

@@ -23,7 +23,7 @@ export const colors = [
     NEW_BACKGROUND_COLOR : "#f4ebda",
     HEADER : "#f5dec0",
     BORDER_COLOR : "gray",
-    BACKDROP_COLOR : "rgba(0, 0, 0, 0.3)",
+    BACKDROP_COLOR : "rgba(0, 0, 0, 0.5)",
     DROPDOWN_COLOR : "#EFEFEF",
     INPUT_BG : "#f6f1ee"
   }

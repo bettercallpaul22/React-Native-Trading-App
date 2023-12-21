@@ -27,7 +27,8 @@ import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../services/features/userSlice';
 import { User } from '../../model';
 import { Header } from '../components/Header';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { useSend_trade_offerMutation } from '../services/api/offerSlice';
+import { useRoute } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 interface ImageType {
@@ -42,9 +43,9 @@ interface InputPros {
 
 
 
-const ListItem = () => {
-    const navigator = useNavigation<NavigationProp<any>>()
-
+const TradeListItem = () => {
+    const route_data:any =  useRoute()
+    console.log("route_data", route_data.params.product_id)
     const current_user: User = useSelector(selectCurrentUser)
     const [image, setImage] = useState(null);
     const [categorySelected, setcategorySelected] = useState('')
@@ -57,7 +58,7 @@ const ListItem = () => {
     const [conditionErr, setConditionErr] = useState('')
     const [categoryErr, setCategoryeErr] = useState('')
     const [imageArr, setimageArr] = useState<ImageType[]>([])
-    const [post_item, { isLoading }] = useCreate_productMutation()
+    const [trade_offer, { isLoading }] = useSend_trade_offerMutation()
     const [modalVisible, setModalVisible] = useState(false);
 
 
@@ -89,7 +90,6 @@ const ListItem = () => {
     const handleSubmitData = async (values: InputPros, errors: any,) => {
         if (!categorySelected) return setCategoryeErr('Please select category type')
         if (!itemCondition) return setConditionErr('Please select item condition')
-        if (!dealType) return setDealTypeErr('Please select a deal type')
         if (!values.item_desc) return
         if (
             errors.item_name ||
@@ -97,29 +97,28 @@ const ListItem = () => {
             errors.item_desc ||
             !itemCondition ||
             !categorySelected ||
-            !dealType ||
             imageArr.length < 1
 
         ) return
         const item_data = {
-            owner_id: current_user._id,
+            product_id: route_data.params.product_id,
             product_name: values.item_name,
-            product_price: parseInt(values.item_price),
+            product_value: parseInt(values.item_price),
             product_category: categorySelected,
             product_condition: itemCondition,
             product_desc: values.item_desc,
-            deal_type: dealType,
             images: imageArr
 
         }
         try {
-            const res = await post_item(item_data).unwrap()
+            const res = await trade_offer(item_data).unwrap()
             if (res.success) {
-                values.item_name = ''
-                values.item_price = ''
-                values.item_desc = ''
-                setimageArr([])
-                setModalVisible(true)
+                console.log(res)
+                // values.item_name = ''
+                // values.item_price = ''
+                // values.item_desc = ''
+                // setimageArr([])
+                // setModalVisible(true)
             }
         }
         catch (error) {
@@ -139,8 +138,7 @@ const ListItem = () => {
                 <View style={styles.saveAreaViewContainer}>
                     <View style={styles.viewContainer}>
                         <StatusBar backgroundColor={color.NEW_BACKGROUND_COLOR} barStyle="dark-content" />
-                        <Header title='List Your Item' />
-                        <ScrollView style={{ paddingHorizontal: 20 }}>
+                        <ScrollView style={{ paddingHorizontal: 20,  }}>
                             <View
                                 style={{ paddingTop: 20, width: '100%', paddingBottom: 50, }}
                             >
@@ -196,7 +194,7 @@ const ListItem = () => {
                                     error={conditionErr}
                                 />
 
-                                <SelectDropDown
+                                {/* <SelectDropDown
                                     title='Trade Type'
                                     itemsData={deal}
                                     onSelect={(selectedItem, index) => {
@@ -204,7 +202,7 @@ const ListItem = () => {
                                         setDealTypeErr('')
                                     }}
                                     error={dealtypeErr}
-                                />
+                                /> */}
 
 
                                 <View style={[errors.item_desc && touched.item_desc ? styles.input_wrapper_error_desc : styles.input_wrapper_desc,
@@ -269,6 +267,7 @@ const ListItem = () => {
 
 
                                 </View>
+
                                 <CustoButton
                                     disabled={isLoading}
                                     title={!isLoading ? 'Post Item' : 'Submitting...'}
@@ -279,6 +278,7 @@ const ListItem = () => {
                                     }}
                                 />
                             </View>
+
                         </ScrollView>
 
                     </View>
@@ -302,16 +302,6 @@ const ListItem = () => {
                                         setModalVisible(!modalVisible)
                                     }}
                                 />
-                                {/* <View style={{width:'100%', marginTop:10}}>
-                                <Button
-                                    title='dismiss'
-                                    color={'purple'}
-                                    onPress={() => {
-                                        setModalVisible(!modalVisible)
-                                        navigator.navigate('HomePage')
-                                    }}
-                                />
-                                </View> */}
                             </View>
                         </View>
                     </Modal>
@@ -333,7 +323,7 @@ const ListItem = () => {
         </Formik>
     );
 };
-export default ListItem
+export default TradeListItem
 const styles = StyleSheet.create({
 
     saveAreaViewContainer: {
@@ -455,7 +445,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         // marginTop: 22,
-        backgroundColor: color.BACKDROP_COLOR,
+        backgroundColor: 'rgba(255,255,255,0.8)',
 
     },
     modalView: {

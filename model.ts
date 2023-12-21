@@ -26,6 +26,12 @@ export type AppStackParamList = {
     Register:undefined;
 }
 
+export interface Image{
+    _id:number;
+    image:string;
+    }
+    
+
 
 export interface Product{
     _id: string;
@@ -36,7 +42,7 @@ export interface Product{
     product_condition: string;
     product_desc: string;
     deal_type: string;
-    images:string[],
+    images:Image[],
 }
 
 export interface SingleProductType{
@@ -45,6 +51,21 @@ export interface SingleProductType{
 }
 export interface UserProducts{
     product:Product[]
+}
+
+
+export interface Offer{
+    _id:string;
+    type:string;
+    offered:string;
+    product_condition:string;
+    product_value:string;
+    product_name:string;
+    price_offered:string;
+    customer:User;
+    product:Product;
+    success:boolean;
+    images:Image[];
 }
 
 

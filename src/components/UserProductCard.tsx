@@ -105,17 +105,19 @@ const UserProductCard:React.FC<Data> = ({data}) => {
                             navigator.navigate('ProductDetails2', { data: item, images: item.images })
                         }}
                     >
-                        {item.product_condition === "Fairy Used" && <Text
-                            style={{ fontWeight: '600', color: 'gray', position: 'absolute', right: 20 }}
-                        >{item.product_condition}</Text>}
-
-                        {item.product_condition === "New With Tag" && <Text
-                            style={{ fontWeight: '600', color: 'gray', position: 'absolute', right: 20 }}
-                        >{item.product_condition}</Text>}
-
-                        {item.product_condition === "New" && <Text
-                            style={{ fontWeight: '600', color: 'gray', position: 'absolute', right: 20 }}
-                        >{item.product_condition}</Text>}
+                        <View style={styles.condition_text}>
+                            {item.product_condition === "Fairy Used" && <Text
+                                style={{ fontWeight: '600', color: '#ccc', }}
+                            >{item.product_condition}</Text>}
+    
+                            {item.product_condition === "New With Tag" && <Text
+                                style={{ fontWeight: '600', color: '#ccc', }}
+                            >{item.product_condition}</Text>}
+    
+                            {item.product_condition === "New" && <Text
+                                style={{ fontWeight: '600', color: '#ccc',  }}
+                            >{item.product_condition}</Text>}
+                            </View>
                         <View style={styles.image_container}>
 
                             <Image
@@ -124,10 +126,10 @@ const UserProductCard:React.FC<Data> = ({data}) => {
                                 // source={require('../../assets/images/Egypt.png')}
                                 source={{ uri: item.images[0]['image'] }}
                             />
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            {/* <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <Entypo name="location-pin" size={22} color="black" />
                                 <Text style={{ fontWeight: '600', color: 'gray' }}>lagos Ng</Text>
-                            </View>
+                            </View> */}
                         </View>
 
                         <View style={{ flex: 2, paddingTop: 15 }}>
@@ -205,11 +207,14 @@ const styles = StyleSheet.create({
 
     },
     condition_text: {
-        fontSize: fontSize.xm,
         fontWeight: '500',
         color: 'gray',
         position: 'absolute',
-        right: 0
+        right: 10,
+        bottom:10,
+        paddingHorizontal:5,
+        borderRadius:3,
+        backgroundColor:'rgba(0,0,0, 0.7)'
     }
 
 })

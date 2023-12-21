@@ -13,8 +13,12 @@ import UserProductCard from '../components/UserProductCard';
 import { useGet_user_productsQuery } from '../services/api/productApiSlice';
 import Loading from '../components/Loading';
 import { useRoute } from '@react-navigation/native';
+import RequestSent from './RequestSent';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+
 
 const { width } = Dimensions.get('screen')
+const Tab = createMaterialTopTabNavigator();
 
 const SellerProfile = () => {
   const { params } = useRoute()
@@ -29,10 +33,18 @@ const SellerProfile = () => {
     }, 5000);
   }, []);
 
+  console.log("seller id", seller_profile._id)
 
 
 
 
+  const RecentPost = () => {
+    return (
+      <ScrollView contentContainerStyle={{ padding: 20 }} style={{}}>
+        <UserProductCard data={data} />
+      </ScrollView>
+    )
+  }
 
 
   return (
@@ -89,16 +101,29 @@ const SellerProfile = () => {
         </View>
         <Text style={styles.bio}>{seller_profile?.bio}</Text>
       </View>
-      <Text style={{ marginLeft: 20, fontWeight: '600', fontSize: fontSize.lg, }}>Recent Post</Text>
-      <View style={{ width, borderWidth: 0.5, borderColor: 'purple' }}></View>
-      <ScrollView contentContainerStyle={{ padding: 20 }} style={{}}>
-        {
-          isLoading ? <Loading message='Loading...' />
-            : isError ? <Loading message='Error Getting Posts, Pull down to retry' />
-              : <UserProductCard data={data} />
-        }
+      {/* <Text style={{ marginLeft: 20, fontWeight: '600', fontSize: fontSize.lg, }}>Recent Post</Text>
+      <View style={{ width, borderWidth: 0.5, borderColor: 'purple' }}></View> */}
+     
+      <Tab.Navigator
+        style={{ paddingTop: 20 }}
+        keyboardDismissMode='on-drag'
+        backBehavior='none'
+        tabBarPosition='top'
 
-      </ScrollView>
+        screenOptions={{
+          tabBarActiveTintColor: 'purple',
+          tabBarInactiveTintColor: 'black',
+          tabBarContentContainerStyle: { backgroundColor: color.NEW_BACKGROUND_COLOR },
+          animationEnabled: true,
+          // tabBarBounces:true
+          tabBarPressColor: 'rgb(216,191,216)',
+
+        }}
+        sceneContainerStyle={{ backgroundColor: color.NEW_BACKGROUND_COLOR }}
+      >
+        <Tab.Screen name="Recent Post" component={RecentPost} />
+        <Tab.Screen name="Likes" component={RequestSent} />
+      </Tab.Navigator>
     </View>
   )
 }

@@ -28,22 +28,11 @@ const SelectDropDown: React.FC<SelectProps> = ({ itemsData, onSelect, title, err
         <View style={{marginBottom:error ? 0 : 20 }}>
             <SelectDropdown
                 data={itemsData}
-                // defaultValueByIndex={1}
-                // defaultValue={{
-                //   title: 'England',
-                //   image: require('./Images/England.jpg'),
-                // }}
                 onSelect={onSelect}
                 buttonStyle={styles.dropdown3BtnStyle}
                 renderCustomizedButtonChild={(selectedItem, index) => {
                     return (
                         <View style={styles.dropdown3BtnChildStyle}>
-                            {selectedItem ? (
-                                <Image source={selectedItem.image} style={styles.dropdown3BtnImage} />
-                            ) : (
-                                <MaterialIcons name="category" size={24} color="black" />
-
-                            )}
                             <Text style={styles.dropdown3BtnTxt}>{selectedItem ? selectedItem.title : title}</Text>
                             <Ionicons name="md-chevron-down" size={24} color="black" />
                         </View>
@@ -54,7 +43,7 @@ const SelectDropDown: React.FC<SelectProps> = ({ itemsData, onSelect, title, err
                 renderCustomizedRowChild={(item, index) => {
                     return (
                         <View style={styles.dropdown3RowChildStyle}>
-                            <Image source={item.image} style={styles.dropdownRowImage} />
+                            {/* <Image source={item.image} style={styles.dropdownRowImage} /> */}
                             <Text style={styles.dropdown3RowTxt}>{item.title}</Text>
                         </View>
                     );
@@ -79,7 +68,7 @@ const styles = StyleSheet.create({
     dropdown3BtnStyle: {
         width: '100%',
         height: 50,
-        backgroundColor: '#FFF',
+        backgroundColor: color.INPUT_BG,
         paddingHorizontal: 0,
         borderWidth: 1,
         borderRadius: 8,
@@ -91,14 +80,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingHorizontal: 18,
+        paddingHorizontal: 10,
     },
     dropdown3BtnImage: { width: 45, height: 45, resizeMode: 'cover', borderRadius: 100 },
     dropdown3BtnTxt: {
         color: '#444',
         textAlign: 'center',
-        fontWeight: 'bold',
-        fontSize: fontSize.lg,
+        // fontWeight: 'bold',
+        fontSize: fontSize.sm,
         marginHorizontal: 12,
     },
     dropdown3DropdownStyle: { backgroundColor: 'slategray' },

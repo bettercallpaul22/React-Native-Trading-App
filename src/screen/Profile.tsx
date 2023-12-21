@@ -13,28 +13,33 @@ import UserProductCard from '../components/UserProductCard';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useGet_user_productsQuery } from '../services/api/productApiSlice';
 import { ProfileHeader } from '../components/ProfileHeader';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import RequestRecieved from './RequestRecieved';
+import RequestSent from './RequestSent';
 
 const { width } = Dimensions.get('screen')
+const Tab = createMaterialTopTabNavigator();
 
 const Profile = () => {
   const navigator = useNavigation<NavigationProp<any>>()
   const user: User = useSelector(selectCurrentUser)
   const { isLoading, data, isError } = useGet_user_productsQuery({ owner_id: user?._id })
 
+
+
+  const RecentPost = () => {
+    return (
+      <ScrollView contentContainerStyle={{ padding: 20 }} style={{}}>
+        <UserProductCard data={data} />
+      </ScrollView>
+    )
+  }
+
+
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={color.NEW_BACKGROUND_COLOR} barStyle="dark-content" />
       <ProfileHeader title='Profile' />
-      {/* <TouchableOpacity
-        onPress={() => {
-
-        }}
-        style={styles.edit_follow_container}
-      >
-        <FontAwesome5 name="user-edit" size={22} color="black" />
-        <Text style={{ fontSize: fontSize.xm, fontWeight: '600', letterSpacing: 1 }}>EDIT</Text>
-      </TouchableOpacity> */}
-
       {<View style={styles.follow_container} >
         <TouchableOpacity
           style={{ backgroundColor: 'rgb(216,191,216)', padding: 5, borderRadius: 10 }}
@@ -80,17 +85,31 @@ const Profile = () => {
         </View>
         <Text style={styles.bio}>{user?.bio}</Text>
       </View>
-      <Text style={{ marginLeft: 20, fontWeight: '600', fontSize: fontSize.lg, }}>Recent Post</Text>
-      <View style={{ width, borderWidth: 0.5, borderColor: 'purple' }}></View>
-      <ScrollView contentContainerStyle={{ padding: 20 }} style={{}}>
+      {/* <Text style={{ marginLeft: 20, fontWeight: '600', fontSize: fontSize.lg, }}>Recent Post</Text> */}
+      {/* <View style={{ width, borderWidth: 0.5, borderColor: 'purple' }}></View> */}
 
-        <UserProductCard data={data} />
+      <Tab.Navigator
+        style={{ paddingTop: 20 }}
+        keyboardDismissMode='on-drag'
+        backBehavior='none'
+        tabBarPosition='top'
 
-      </ScrollView>
-      {/* <View>
-        <Text>Recent Post</Text>
-        
-      </View> */}
+        screenOptions={{
+          tabBarActiveTintColor: 'purple',
+          tabBarInactiveTintColor: 'black',
+          tabBarContentContainerStyle: { backgroundColor: color.NEW_BACKGROUND_COLOR },
+          animationEnabled: true,
+          // tabBarBounces:true
+          tabBarPressColor: 'rgb(216,191,216)',
+
+        }}
+        sceneContainerStyle={{ backgroundColor: color.NEW_BACKGROUND_COLOR }}
+      >
+        <Tab.Screen name="Recent Post" component={RecentPost} />
+        <Tab.Screen name="Likes" component={RequestSent} />
+      </Tab.Navigator>
+
+
     </View>
   )
 }

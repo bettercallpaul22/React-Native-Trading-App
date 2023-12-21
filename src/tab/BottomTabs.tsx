@@ -17,7 +17,7 @@ const Tab = createMaterialBottomTabNavigator();
 const BottomTabs = () => {
   return (
 
-      <Tab.Navigator barStyle={{backgroundColor:color.NEW_BACKGROUND_COLOR, borderColor:'purple', borderWidth:0.5 }}>
+      <Tab.Navigator  barStyle={{backgroundColor:color.NEW_BACKGROUND_COLOR, borderColor:'purple', borderWidth:0.5 }}>
         <Tab.Screen  name="Home" component={HomeScreen}
           options={{
             tabBarIcon: ({ focused }) => (
@@ -33,9 +33,11 @@ const BottomTabs = () => {
               <MaterialCommunityIcons name={focused ? "plus-circle" : "plus-circle-outline"} size={24} color="purple" />
             )
           }}
-        />
+        /> 
         <Tab.Screen name="Request" component={Request}
+
           options={{
+
             tabBarIcon: ({ focused }) => (
               <MaterialCommunityIcons name={focused ? "stack-exchange" : "stack-exchange"} size={24} color="purple" />
             )

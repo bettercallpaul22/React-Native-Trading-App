@@ -6,13 +6,12 @@ export const category = [
 ];
 
 export const condition = [
-    { title: 'New', image: require('../assets/images/new.png') },
-    { title: 'New With Tag', image: require('../assets/images/new-tag.jpg') },
-    { title: 'Fairy Used', image: require('../assets/images/used.jpg') },
+    { title: 'new', image: require('../assets/images/new.png') },
+    { title: 'used', image: require('../assets/images/used.jpg') },
 ];
 
 export const deal = [
-    { title: 'Cash Sale', image: require('../assets/images/sale.jpg') },
-    { title: 'Swap & Add Cash', image: require('../assets/images/swap-sale.jpg') },
-    { title: 'Swap Only', image: require('../assets/images/swap-only.png') },
+    { title: 'cash sale', image: require('../assets/images/sale.jpg') },
+    { title: 'swap and cash', image: require('../assets/images/swap-sale.jpg') },
+    { title: 'swap', image: require('../assets/images/swap-only.png') },
 ];
